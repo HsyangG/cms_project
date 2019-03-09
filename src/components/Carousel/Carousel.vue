@@ -293,7 +293,7 @@ export default {
   }
 </style>-->
 <template>
-  <div class="carousel-container">
+  <div class="carousel-container" ref="carouselContainer">
     <!--<div class="slide-img">
       <ul class="container" :style="containerStyle">
         &lt;!&ndash;列表最前面的辅助图，它和最后一张图一样，用于无限滚动&ndash;&gt;
@@ -375,10 +375,14 @@ export default {
       }
     }
   },
+  created () {
+  },
   mounted () {
     this.$nextTick(() => {
       this._begin()
     })
+    // 在页面加载完毕的时候执行该事件，阻止事件冒泡
+    this.toStopDefault()
   },
   methods: {
     /**
@@ -399,7 +403,6 @@ export default {
         this.isShow = true
         this.currentIndex = 0
       }
-      console.log(this.currentIndex)
     },
     /**
      * 开始定时切换图片
@@ -412,6 +415,17 @@ export default {
      */
     _stop () {
       clearInterval(this.carouselTimer)
+    },
+    /**
+     *  阻止事件穿透
+     *  用来阻止滑动轮播图的时候产生的事件冒泡，影响到父组件
+     */
+    toStopDefault () {
+      let stop = this.$refs.carouselContainer
+      stop.addEventListener('touchmove', (event) => {
+        event.preventDefault() // 阻止默认行为
+        event.stopPropagation() // 阻止事件冒泡
+      }, false)
     }
   }
 }

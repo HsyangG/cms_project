@@ -14,11 +14,13 @@ export default {
   data () {
     return {
       navList: [
-        {className: 'cms-news', title: '新闻资讯', router: {name: 'news.list'}},
-        {className: 'cms-picShare', title: '图文分享', router: {name: 'news.list'}},
-        {className: 'cms-goodsShow', title: '商品展示', router: {name: 'news.list'}},
-        {className: 'cms-feedback', title: '留言反馈', router: {name: 'news.list'}},
-        {className: 'cms-search', title: '搜索资讯', router: {name: 'news.list'}},
+        {className: 'cms-recommend', title: '推荐', router: {name: 'news.list'}},
+        {className: 'cms-phone', title: '手机', router: {name: 'news.list'}},
+        {className: 'cms-intelligence', title: '智能', router: {name: 'news.list'}},
+        {className: 'cms-television', title: '电视', router: {name: 'news.list'}},
+        {className: 'cms-laptop', title: '笔记本', router: {name: 'news.list'}},
+        {className: 'cms-appliance', title: '家电', router: {name: 'news.list'}},
+        {className: 'cms-life', title: '生活周边', router: {name: 'news.list'}},
         {className: 'cms-callMe', title: '联系我们', router: {name: 'login'}}
       ],
       nowIndex: 0
@@ -41,7 +43,7 @@ export default {
     }, */
     _initScroll () {
       let navWidth = 64
-      let width = (navWidth + 50) * this.navList.length
+      let width = (navWidth + 25) * this.navList.length
       this.$refs.navList.style.width = width + 'px'
       if (!this.navScroll) {
         this.navScroll = new BScroll(this.$refs.navWrapper, {
@@ -82,6 +84,11 @@ export default {
   .active{
     box-sizing: border-box;
     color: #ff7035;
-    border-bottom: 1px solid #ff4b02;
+    border-bottom: 2px solid #ff4b02;
+  }
+  .line{
+    width: 100%;
+    height: 1px;
+    background: #ccc;
   }
 </style>

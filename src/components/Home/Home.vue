@@ -81,7 +81,6 @@
       <v-nav></v-nav>
       <v-swiper></v-swiper>
     </div>
-    <bt-menu></bt-menu>
   </div>
 </template>
 

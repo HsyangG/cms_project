@@ -17,12 +17,15 @@
 <script type="text/ecmascript-6">
 import NewsList from './../../News/NewsList'
 import Logp from './../../Logp/Logp'
+import Phone from './../../views/phone/phone'
 import Swiper from 'swiper/dist/js/swiper.min'
 import 'swiper/dist/css/swiper.min.css'
 export default {
   data () {
     return {
       list: [
+        {router: {name: 'news.list'}, component: NewsList},
+        {router: {name: 'phone.list'}, component: Phone},
         {router: {name: 'news.list'}, component: NewsList},
         {router: {name: 'news.list'}, component: NewsList},
         {router: {name: 'news.list'}, component: NewsList},

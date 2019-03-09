@@ -52,9 +52,11 @@ export default {
 <style>
   .bt_menu{
     position: absolute;
-    left: 0;
-    bottom: 0;
+    padding: 5px 0;
+    right: 0;
+    bottom: -5px;
     width: 100%;
+    z-index: 1000;
     overflow: hidden;
     background-color: white;
   }

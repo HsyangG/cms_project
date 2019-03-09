@@ -64,6 +64,11 @@ export default new Router({
       path: '/news/list', // 锚点值
       component: NewsList
     },
+    {
+      name: 'phone.list',
+      path: '/views/phone/phone',
+      component: () => import('@/components/views/phone/phone')
+    },
     // 登录
     {
       name: 'login',

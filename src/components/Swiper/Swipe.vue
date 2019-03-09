@@ -122,6 +122,24 @@ export default {
           dragState.nextPage.style.display = 'block'
         }
       }
+    },
+    doOnTouchMove () {
+      if (!this.noDrag) return false
+      let dragState = this.dragState
+      let touch = event.touches[0]
+      dragState.currentLeft = touch.pageX
+      dragState.currentTop = touch.pageY
+      dragState.currentTopAbsolute = touch.clientY
+      // 计算滑动距离
+      let offsetLeft = dragState.currentLeft - dragState.startLeft
+      let offsetTop = dragState.currentTop - dragState.startTopAbsolute
+      let distanceX = Math.abs(offsetLeft)
+      let distanceY = Math.abs(offsetTop)
+      // 判断是横屏滚动还是竖屏滚动
+      if (distanceX < 5 || distanceX >=5 && distanceY >= 1.73 * distanceY) {
+        // 当前是竖屏滚动，不允许执行 drag 动作
+        this.userScrolling = true
+      }
     }
   }
 }
