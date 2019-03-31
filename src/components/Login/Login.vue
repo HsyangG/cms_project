@@ -1,5 +1,6 @@
 <template>
   <div class="login">
+    <div class="back" @click.prevent="toMe"><svg-icon icon-class="houtui"></svg-icon></div>
     <h3>短信登录</h3>
     <div class="verify" v-show="verShowTip"><p>该账号未注册！</p></div>
     <div class="verify" v-if="errors.length"><p v-for="error in errors" :key="error.index">{{error}}</p></div>
@@ -144,6 +145,9 @@ export default {
     toReg () {
       // 没有账号，跳转去注册
       this.$router.push('/callme/register')
+    },
+    toMe () {
+      this.$router.push('/me')
     }
   }
 }
@@ -151,11 +155,23 @@ export default {
 
 <style scoped>
 .login{
+  /*margin: 20px auto;*/
+  /*width: 310px;*/
+  /*height: 100%;*/
+  /*background: #fff;*/
+  /*padding: 30px 30px 0 30px;*/
+  position: relative;
   margin: 20px auto;
   width: 310px;
   height: 100%;
   background: #fff;
   padding: 30px 30px 0 30px;
+}
+.back{
+  width: 25px;
+  height: 25px;
+  font-size: 16px;
+  line-height: 25px;
 }
 h3{
   font-size: 25px;
@@ -168,11 +184,12 @@ h3{
   color: red
 }
 .submitBtn{
-  width: 65%;
+  /*width: 65%;*/
+  width: 100%;
   height: 38px;
   border: none;
-  border-radius: 20px;
-  background: #28a3ff;
+  border-radius: 5px;
+  background: #ff6c02;
   color: white;
   outline: none;
   margin-bottom: 20px;
@@ -207,7 +224,7 @@ h3{
   width: 110px;
   height: 40px;
   float: right;
-  background: #28a3ff;
+  background: #ff6c02;
   color: white;
   border-radius: 5px;
   text-align: center;

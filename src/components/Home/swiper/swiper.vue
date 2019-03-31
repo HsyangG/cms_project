@@ -16,22 +16,25 @@
 
 <script type="text/ecmascript-6">
 import NewsList from './../../News/NewsList'
-import Logp from './../../Logp/Logp'
+// import Logp from './../../Logp/Logp'
 import Phone from './../../views/phone/phone'
+import Intelligence from './../../views/intelligence/intelligence'
+import Television from './../../views/television/television'
+import Life from './../../views/life/life'
 import Swiper from 'swiper/dist/js/swiper.min'
 import 'swiper/dist/css/swiper.min.css'
 export default {
   data () {
     return {
       list: [
-        {router: {name: 'news.list'}, component: NewsList},
-        {router: {name: 'phone.list'}, component: Phone},
-        {router: {name: 'news.list'}, component: NewsList},
-        {router: {name: 'news.list'}, component: NewsList},
-        {router: {name: 'news.list'}, component: NewsList},
-        {router: {name: 'news.list'}, component: NewsList},
-        {router: {name: 'news.list'}, component: NewsList},
-        {router: {name: 'logp'}, component: Logp}
+        {router: {name: 'newsList'}, component: NewsList},
+        {router: {name: 'phoneList'}, component: Phone},
+        {router: {name: 'intelligenceList'}, component: Intelligence},
+        {router: {name: 'televisionList'}, component: Television},
+        {router: {name: 'televisionList'}, component: Television},
+        {router: {name: 'lifeList'}, component: Life}
+        // {router: {name: 'news.list'}, component: NewsList},
+        // {router: {name: 'logp'}, component: Logp}
       ]
     }
   },

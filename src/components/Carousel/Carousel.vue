@@ -338,6 +338,8 @@ export default {
 </template>
 
 <script>
+import {toStopPrevent} from '../../utils'
+
 export default {
   name: 'v-carousel',
   data () {
@@ -382,7 +384,8 @@ export default {
       this._begin()
     })
     // 在页面加载完毕的时候执行该事件，阻止事件冒泡
-    this.toStopDefault()
+    // this.toStopDefault()
+    toStopPrevent(this.$refs.carouselContainer)
   },
   methods: {
     /**
@@ -415,18 +418,18 @@ export default {
      */
     _stop () {
       clearInterval(this.carouselTimer)
-    },
+    }
     /**
      *  阻止事件穿透
      *  用来阻止滑动轮播图的时候产生的事件冒泡，影响到父组件
      */
-    toStopDefault () {
-      let stop = this.$refs.carouselContainer
-      stop.addEventListener('touchmove', (event) => {
-        event.preventDefault() // 阻止默认行为
-        event.stopPropagation() // 阻止事件冒泡
-      }, false)
-    }
+    // toStopDefault () {
+    //   let stop = this.$refs.carouselContainer
+    //   stop.addEventListener('touchmove', (event) => {
+    //     event.preventDefault() // 阻止默认行为
+    //     event.stopPropagation() // 阻止事件冒泡
+    //   }, false)
+    // }
   }
 }
 </script>

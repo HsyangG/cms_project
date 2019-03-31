@@ -1,5 +1,6 @@
 <template>
   <div class="register">
+    <div class="back" @click.prevent="toMe"><svg-icon icon-class="houtui"></svg-icon></div>
     <h3>注册账号</h3>
     <div class="verify" v-show="verShowTip"><p>该账号已存在！</p></div>
     <div class="verify" v-if="errors.length"><p v-for="error in errors" :key="error.index">{{error}}</p></div>
@@ -136,6 +137,9 @@ export default {
     tologin () {
       // 已有账号，跳转去登录
       this.$router.push('/callme/login')
+    },
+    toMe () {
+      this.$router.push('/me')
     }
   }
 }
@@ -143,10 +147,18 @@ export default {
 
 <style scoped>
   .register{
+    position: relative;
     margin: 20px auto;
     width: 310px;
+    height: 100%;
     background: #fff;
     padding: 30px 30px 0 30px;
+  }
+  .back{
+    width: 25px;
+    height: 25px;
+    font-size: 16px;
+    line-height: 25px;
   }
   h3{
     font-size: 25px;
@@ -159,11 +171,12 @@ export default {
     color: red
   }
   .submitBtn{
-    width: 65%;
+    /*width: 65%;*/
+    width: 100%;
     height: 38px;
     border: none;
-    border-radius: 20px;
-    background-color: #68c23b;
+    border-radius: 5px;
+    background-color: #ff6c02;
     color: white;
     outline: none;
     margin-bottom: 20px;
@@ -199,7 +212,7 @@ export default {
     width: 110px;
     height: 40px;
     float: right;
-    background: #28a3ff;
+    background: #ff6c02;
     color: white;
     border-radius: 5px;
     text-align: center;

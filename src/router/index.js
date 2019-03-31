@@ -60,14 +60,29 @@ export default new Router({
     },
     // 新闻列表
     {
-      name: 'news.list',
+      name: 'newsList',
       path: '/news/list', // 锚点值
       component: NewsList
     },
     {
-      name: 'phone.list',
+      name: 'phoneList',
       path: '/views/phone/phone',
       component: () => import('@/components/views/phone/phone')
+    },
+    {
+      name: 'intelligenceList',
+      path: '/views/intelligence/intelligence',
+      component: () => import('@/components/views/intelligence/intelligence')
+    },
+    {
+      name: 'televisionList',
+      path: '/views/television/television',
+      component: () => import('@/components/views/television/television')
+    },
+    {
+      name: 'lifeList',
+      path: '/views/life/life',
+      component: () => import('@/components/views/life/life')
     },
     // 登录
     {

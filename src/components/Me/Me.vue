@@ -1,8 +1,16 @@
 <template>
   <div class="me wrapper" ref="wrapper">
     <div class="content" ref="content">
-      <div class="meHeader"></div>
-      <div class="myOrder"></div>
+      <div class="meHeader">
+        <div class="me_login">
+          <img src="@/assets/img/avatar_default.png" alt="" @click.prevent="toLogin">
+          <div>登录/注册</div>
+        </div>
+      </div>
+      <div class="myOrder">
+        <div class="myOrder_left">我的订单</div>
+        <div class="myOrder_right">全部订单 <svg-icon icon-class="qianjin" style="color: #ccc !important;"></svg-icon></div>
+      </div>
       <div class="line"></div>
       <div class="payManage">
         <ul>
@@ -90,7 +98,7 @@ export default {
     return {
     }
   },
-  created () {
+  mounted () {
     this.initScroll()
   },
   methods: {
@@ -110,6 +118,9 @@ export default {
           this.scroll.refresh()
         }
       })
+    },
+    toLogin () {
+      this.$router.push('/callme/logp')
     }
   }
 }
@@ -125,13 +136,51 @@ export default {
   overflow: hidden;
 }
 .meHeader{
+  position: relative;
   width: 100%;
-  height: 120px;
-  background-color: red;
+  height: 100px;
+  box-sizing: border-box;
+  padding: 15px;
+  background-color: #f37e11;
+}
+.me_login{
+  display: flex;
+  position: absolute;
+  left: 15px;
+  bottom: 15px;
+  width: 140px;
+  height: 50px;
+  box-sizing: border-box;
+}
+.me_login img{
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+.me_login div{
+  margin-left: 10px;
+  line-height: 50px;
+  font-size: 14px;
+  color: #ffeff2;
 }
 .myOrder{
+  display: flex;
   width: 100%;
   height: 45px;
+  box-sizing: border-box;
+  padding: 10px 15px;
+}
+.myOrder_left{
+  width: 100%;
+  text-align: left;
+  font-size: 14px;
+  line-height: 25px;
+}
+.myOrder_right{
+  width: 100%;
+  text-align: right;
+  font-size: 14px;
+  line-height: 25px;
 }
 .payManage{
   width: 100%;

@@ -5,14 +5,7 @@
         <div class="carouselMap">
           <v-carousel></v-carousel>
         </div>
-        <ul class="submenu">
-          <li v-for="(item, index) in submitItemList" :class="item.class" ref="submitList" :key="index">
-            <div class="submenu-item">
-              <img :src="item.imgUrl" alt="" style="margin-top: 5px">
-              <p style="margin-top: 3px">{{ item.text }}</p>
-            </div>
-          </li>
-        </ul>
+        <v-submenu></v-submenu>
         <div class="line"></div>
         <div class="morningNewspaper">
           <img src="http://localhost:3000/public/img/img/shangchengzaobao.png" alt="">
@@ -73,12 +66,15 @@
 
 <script type="text/ecmascript-6">
 import VCarousel from '../Carousel/Carousel'
-
+import Submenu from './../Submenu/submenu'
 import { initScroll } from './../../utils'
 
 export default {
   name: 'news-list',
-  components: {VCarousel},
+  components: {
+    VCarousel,
+    'v-submenu': Submenu
+  },
   data () {
     return {
       submitItemList: [
@@ -169,30 +165,6 @@ export default {
   }
   .mapList img{
     width: 100%;
-  }
-  .submenu{
-    display: flex;
-    justify-content: space-between;
-    box-sizing: border-box;
-    width: 100%;
-    padding: 20px 10px;
-    /*line-height: 64px;*/
-  }
-  .submitList{
-    display: inline-block;
-    float: left;
-  }
-  .submenu li div{
-    width: 64px;
-    height: 64px;
-    font-size: 12px;
-    text-align: center;
-    /*line-height: 64px;*/
-  }
-  .submenu li div img{
-    display: inline-block; /*将图片变成行内块级元素，可以实现图片居中*/
-    width: 36px;
-    height: 36px;
   }
   .morningNewspaper{
     display: flex;

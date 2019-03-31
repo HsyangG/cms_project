@@ -3,10 +3,9 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-
 // 配置axios
 import Axios from 'axios'
-
+import '@/icons' // icon
 // 配置MinUI
 import MinUI from 'mint-ui'
 // 引入css
@@ -33,7 +32,6 @@ Vue.component(MyLi.name, MyLi)
 Vue.component(BtMenu.name, BtMenu)
 Vue.component(Header.name, Header)
 Vue.component(Carousel.name, Carousel)
-
 // 挂载属性，让所有组件都能用
 Vue.prototype.$axios = Axios
 

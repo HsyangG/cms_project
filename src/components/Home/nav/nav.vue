@@ -14,14 +14,13 @@ export default {
   data () {
     return {
       navList: [
-        {className: 'cms-recommend', title: '推荐', router: {name: 'news.list'}},
-        {className: 'cms-phone', title: '手机', router: {name: 'news.list'}},
-        {className: 'cms-intelligence', title: '智能', router: {name: 'news.list'}},
-        {className: 'cms-television', title: '电视', router: {name: 'news.list'}},
-        {className: 'cms-laptop', title: '笔记本', router: {name: 'news.list'}},
-        {className: 'cms-appliance', title: '家电', router: {name: 'news.list'}},
-        {className: 'cms-life', title: '生活周边', router: {name: 'news.list'}},
-        {className: 'cms-callMe', title: '联系我们', router: {name: 'login'}}
+        {className: 'cms-recommend', title: '推荐', router: {name: 'newsList'}},
+        {className: 'cms-phone', title: '手机', router: {name: 'phoneList'}},
+        {className: 'cms-intelligence', title: '智能', router: {name: 'intelligenceList'}},
+        {className: 'cms-television', title: '电视', router: {name: 'televisionList'}},
+        {className: 'cms-laptop', title: '笔记本', router: {name: 'televisionList'}},
+        {className: 'cms-life', title: '生活周边', router: {name: 'lifeList'}}
+        // {className: 'cms-callMe', title: '联系我们', router: {name: 'login'}}
       ],
       nowIndex: 0
     }
@@ -32,9 +31,12 @@ export default {
       this.initPage()
     }) */
     // 接收 swiper 组件发射的 index 进行导航按钮切换高亮和更新模版地址
-    this.$nextTick(() => {
-      this._initScroll()
-    })
+    setTimeout(() => {
+      clearTimeout()
+      this.$nextTick(() => {
+        this._initScroll()
+      })
+    }, 100)
     this.$root.eventHub.$on('slideTab', this.slideTab)
   },
   methods: {

@@ -8,10 +8,10 @@
       <span class="icon-fenlei"></span>
       <span class="meun_text">分类</span>
     </div>
-    <div id="find" @click="toFind">
+    <!--<div id="find" @click="toFind">
       <span class="icon-faxian2"></span>
       <span class="meun_text">发现</span>
-    </div>
+    </div>-->
     <div id="shopcart" @click="toShopcart">
       <span class="icon-gouwuche"></span>
       <span class="meun_text">购物车</span>
@@ -51,14 +51,17 @@ export default {
 
 <style>
   .bt_menu{
+    display: flex;
     position: absolute;
     padding: 5px 0;
     right: 0;
     bottom: -5px;
     width: 100%;
-    z-index: 1000;
+    z-index: 100;
     overflow: hidden;
     background-color: white;
+    justify-content: space-around; /* 只有设置了  display: flex 才会生效 */
+    background: rgba(0,0,0,0.1);
   }
   .bt_menu div{
     float: left;
