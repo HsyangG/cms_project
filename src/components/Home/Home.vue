@@ -80,6 +80,8 @@
       <v-header></v-header>
       <v-nav></v-nav>
       <v-swiper></v-swiper>
+      <div style="width: 100%;height: 42px;"></div>
+      <bt-menu></bt-menu>
     </div>
   </div>
 </template>

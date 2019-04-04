@@ -57,11 +57,12 @@ export default {
     right: 0;
     bottom: -5px;
     width: 100%;
+    height: 42px;
     z-index: 100;
     overflow: hidden;
-    background-color: white;
     justify-content: space-around; /* 只有设置了  display: flex 才会生效 */
-    background: rgba(0,0,0,0.1);
+    background: #fff;
+    box-shadow: 0 -0.1px 0.1px 0.1px #a1a1a1;
   }
   .bt_menu div{
     float: left;

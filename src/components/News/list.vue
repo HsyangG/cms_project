@@ -1,38 +1,34 @@
 <template>
   <transition name="move">
-    <div class="newsList newsListWrapper" ref="newsListWrapper">
-      <div class="listContent">
-        <div class="carouselMap">
-          <v-carousel></v-carousel>
+    <div>
+      <div class="list_header">
+        <div class="go_back" @click.prevent="goBack">
+          <svg-icon icon-class="houtui"></svg-icon>
         </div>
-        <v-submenu></v-submenu>
-        <div class="line"></div>
-        <div class="morningNewspaper">
-          <img src="http://localhost:3000/public/img/img/shangchengzaobao.png" alt="">
-          <span style="color: #ccc;line-height: 44px;">|</span>
-          <span style="padding: 15px 10px;font-size: 12px">正月十五闹花灯，特惠礼物请收好！</span>
-        </div>
-        <div class="shopList">
-          <div class="content">
-            <div class="contentLeft">
-              <img src="http://localhost:3000/public/img/commodities/redminode7.png" alt="" style="width: 100%;height: 100%">
-            </div>
-            <div class="splitDiv"></div>
-            <div class="contentRight">
-              <div class="contentRightTop">
-                <img src="http://localhost:3000/public/img/commodities/haowu.png" alt="" style="width: 100%;height: 100%;">
-              </div>
-              <div class="contentRightButton">
-                <img src="http://localhost:3000/public/img/commodities/xiaomitv4a.png" alt="" style="width: 100%;height: 100%;">
-              </div>
-            </div>
+        <v-header :scanShow="false"></v-header>
+      </div>
+      <div class="newsList newsListWrapper" ref="listWrapper">
+        <div class="listContent">
+          <div class="carouselMap">
+            <v-carousel></v-carousel>
           </div>
-          <div class="SpecialPart">
-            <img src="http://localhost:3000/public/img/commodities/xiaomi8.png" alt="">
-          </div>
+          <div class="topGoods">人气好物TOP 5</div>
+          <div class="line"></div>
           <div class="dailySelection">
-            <div class="dailySelectionTitle">每日精选</div>
-            <div class="dailySelectionContent"></div>
+            <div class="dailySelectionContent">
+              <div class="dailySelectionContentImage">
+                <img src="" alt="">
+              </div>
+              <div class="dailySelectionContentInfo">
+                <div class="dailySelectionContentInfoLeft">
+                  <p>小米手环3 NFC版</p>
+                  <p>能刷公交卡的触摸大屏手环</p>
+                </div>
+                <div class="dailySelectionContentInfoRight">
+                  &yen;199
+                </div>
+              </div>
+            </div>
             <div class="dailySelectionContentList">
               <ul>
                 <li>
@@ -70,40 +66,13 @@ import Submenu from './../Submenu/submenu'
 import { initScroll } from './../../utils'
 
 export default {
-  name: 'news-list',
+  name: 'recommend-list',
   components: {
     VCarousel,
     'v-submenu': Submenu
   },
   data () {
     return {
-      submitItemList: [
-        {
-          imgUrl: 'http://localhost:3000/public/img/shop/crown.png',
-          text: '新品发布',
-          class: 'submitList'
-        },
-        {
-          imgUrl: 'http://localhost:3000/public/img/shop/bell.png',
-          text: '每日臻选',
-          class: 'submitList'
-        },
-        {
-          imgUrl: 'http://localhost:3000/public/img/shop/monitor.png',
-          text: '电视热卖',
-          class: 'submitList'
-        },
-        {
-          imgUrl: 'http://localhost:3000/public/img/shop/donut.png',
-          text: '礼品卡',
-          class: 'submitList'
-        },
-        {
-          imgUrl: 'http://localhost:3000/public/img/shop/ad.png',
-          text: '超值特卖',
-          class: 'submitList'
-        }
-      ]
     }
   },
   // created适合操作数据
@@ -115,28 +84,15 @@ export default {
       .catch(err => console.log('新闻列表异常', err)) */
   },
   mounted () {
-    this.addSubmitMeuList()
     // this._initScroll()
     this.$nextTick(() => {
-      initScroll(this.scroll, this.$refs.newsListWrapper)
+      initScroll(this.scroll, this.$refs.listWrapper)
     })
   },
   methods: {
-    addSubmitMeuList () {
-      // console.log(this.$refs.submitList)
-      // console.log(this.$refs.submitList)
+    goBack () {
+      this.$router.push('/home')
     }
-    /* _initScroll () {
-      this.$nextTick(() => {
-        if (!this.scroll) {
-          this.scroll = new BScroll(this.$refs.newsListWrapper, {
-            click: true
-          })
-        } else {
-          this.scroll.refresh()
-        }
-      })
-    } */
   }
 }
 </script>
@@ -144,6 +100,21 @@ export default {
 <style scoped>
   .cms-s-header {
     background-color: #f7f7f7
+  }
+  .list_header{
+    position: relative;
+  }
+  .go_back{
+    position: absolute;
+    top: 11px;
+    left: 10px;
+    width: 24px;
+    height: 24px;
+    font-size: 20px;
+    z-index: 100;
+  }
+  .header{
+    background: #fafafa;
   }
   .listContent{
     width: 100%;
@@ -159,37 +130,21 @@ export default {
   .move-enter, .move-leave-active{
     transform: translate3d(100%,0,0)
   }
+  .topGoods{
+    width: 100%;
+    height: 50px;
+    font-size: 20px;
+    line-height: 50px;
+    background: #7bacd2;
+    margin: 15px 0;
+    color: #fff;
+  }
   .mapList li{
     width: 100%;
     height: 200px;
   }
   .mapList img{
     width: 100%;
-  }
-  .submenu ul {
-    display: flex;
-    justify-content: space-between;
-    box-sizing: border-box;
-    width: 100%;
-    padding: 20px 10px;
-    /*line-height: 64px;*/
-    text-align: center;
-  }
-  .submitList{
-    display: inline-block;
-    /*float: left;*/
-  }
-  .submenu li div{
-    width: 64px;
-    height: 64px;
-    font-size: 12px;
-    text-align: center;
-    /*line-height: 64px;*/
-  }
-  .submenu li div img{
-    display: inline-block; /*将图片变成行内块级元素，可以实现图片居中*/
-    width: 36px;
-    height: 36px;
   }
   .morningNewspaper{
     display: flex;
@@ -201,26 +156,6 @@ export default {
     width: 80px;
     height: 45px;
   }
-  .shopList{
-    border-top: 15px solid #f5f5f5;
-  }
-  .content{
-    display: flex;
-    width: 100%;
-    height: 266px;
-    box-sizing: border-box;
-    /*background: red;*/
-  }
-  .contentRight{
-    height: 100%;
-  }
-  .SpecialPart{
-    display: flex;
-    width: 100%;
-    height: 143px;
-    margin-top: 15px;
-    border-bottom: 15px solid #f5f5f5;
-  }
   .dailySelectionTitle{
     display: flex;
     width: 100%;
@@ -231,9 +166,38 @@ export default {
   }
   .dailySelectionContent{
     width: 100%;
-    height: 275px;
-    background: #ccd2f6;
+    height: 290px;
+    /* background: #ccd2f6; */
     margin-bottom: 10px;
+  }
+  .dailySelectionContentImage{
+    width: 100%;
+    height: 230px;
+    background: rgba(0,0,0,0.2);
+  }
+  .dailySelectionContentInfo{
+    display: flex;
+    width: 100%;
+    height: 60px;
+    font-size: 14px;
+    box-sizing: border-box;
+    padding: 15px 10px 0 10px;
+  }
+  .dailySelectionContentInfoLeft{
+    width: 160%;
+    text-align: left;
+    font-weight: 700;
+  }
+  .dailySelectionContentInfoLeft p:last-child{
+    margin-top: 5px;
+    font-weight: 500;
+    font-size: 12px;
+    color: #ccc;
+  }
+  .dailySelectionContentInfoRight{
+    width: 40%;
+    text-align: right;
+    color: #ff7035;
   }
   .dailySelectionContentList{
     width: 100%;
@@ -262,7 +226,7 @@ export default {
   }
   .dailyPriceNew{
     font-size: 14px;
-    color: red
+    color: #ff7035;
   }
   .dailyPriceOld{
     font-size: 12px;

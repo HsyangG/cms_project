@@ -52,6 +52,7 @@
         </div>
       </div>
     </div>
+    <bt-menu></bt-menu>
   </div>
 </template>
 

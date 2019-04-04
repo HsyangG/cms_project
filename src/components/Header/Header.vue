@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <div class="headerContent">
-      <div class="scan" v-show="scanShow"><i class="icon-saoyisao"></i></div>
+      <div class="scan"><i class="icon-saoyisao" v-show="scanShow"></i></div>
       <div class="search-group">
         <div class="magnifier" @click="toHome(linkTo)" ref="mag">
           <i class="icon-sousuo" v-show="magShow"></i>

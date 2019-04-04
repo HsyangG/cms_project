@@ -7,7 +7,7 @@
           <div>登录/注册</div>
         </div>
       </div>
-      <div class="myOrder">
+      <div class="myOrder" @click="toMyOrder">
         <div class="myOrder_left">我的订单</div>
         <div class="myOrder_right">全部订单 <svg-icon icon-class="qianjin" style="color: #ccc !important;"></svg-icon></div>
       </div>
@@ -121,6 +121,9 @@ export default {
     },
     toLogin () {
       this.$router.push('/callme/logp')
+    },
+    toMyOrder () {
+      this.$router.push('/me/mine_order')
     }
   }
 }

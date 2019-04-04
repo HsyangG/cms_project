@@ -49,6 +49,11 @@ export default new Router({
       component: Me
     },
     {
+      name: 'my_order',
+      path: '/me/mine_order',
+      component: () => import('@/components/Me/mine_order')
+    },
+    {
       path: '/member',
       name: 'member',
       component: Member
@@ -65,6 +70,11 @@ export default new Router({
       component: NewsList
     },
     {
+      name: 'recommendList',
+      path: '/news/recommend_list',
+      component: () => import('@/components/News/list')
+    },
+    {
       name: 'phoneList',
       path: '/views/phone/phone',
       component: () => import('@/components/views/phone/phone')
@@ -78,6 +88,11 @@ export default new Router({
       name: 'televisionList',
       path: '/views/television/television',
       component: () => import('@/components/views/television/television')
+    },
+    {
+      name: 'television_list_item',
+      path: '/views/television/list',
+      component: () => import('@/components/views/television/list')
     },
     {
       name: 'lifeList',

@@ -5,7 +5,7 @@
         <div class="carouselMap">
           <v-carousel></v-carousel>
         </div>
-        <v-submenu></v-submenu>
+        <v-submenu :submenuType="submenuType"></v-submenu>
         <div class="listTitle">
           <span>热卖爆品</span>
         </div>
@@ -71,7 +71,9 @@ export default {
     'v-submenu': Submenu
   },
   data () {
-    return {}
+    return {
+      submenuType: 2 // 1 是有轮播图的详情页，2 是没有轮播图的详情页
+    }
   },
   created () {
     this.$nextTick(() => {

@@ -4,9 +4,12 @@
     <div class="sort-content">
       <div class="goodsWrapper" ref="goodsWrapper">
         <ul>
-          <li v-for="(item, index) in goods" :key="index" class="menu-item" :class="{'active': currentIndex === index}" @click.prevent="selectMenu(index)">
+          <li v-for="(item, index) in goods" :key="index" class="menu-item" :class="{'active': currentIndex === index || index === goods.length}" @click.prevent="selectMenu(index)">
             <div class="text">{{ item.name }}</div>
           </li>
+          <!--<li>-->
+            <!--<div style="width: 100%;height: 65px;"></div>-->
+          <!--</li>-->
         </ul>
       </div>
       <div class="listWrapper" ref="listWrapper">
@@ -22,9 +25,13 @@
               </li>
             </ul>
           </li>
+          <!--<li>-->
+            <!--<div style="width: 100%;height: 80px;"></div>-->
+          <!--</li>-->
         </ul>
       </div>
     </div>
+    <bt-menu></bt-menu>
   </div>
 </template>
 
@@ -615,8 +622,7 @@ export default {
       for (let i = 0; i < this.listHeight.length; i++) {
         let heightBottom = this.listHeight[i] // 获取区间顶部
         let heightTop = this.listHeight[i + 1] // 获取区间底部
-        // console.log(heightTop)
-        // console.log(heightBottom)
+        // console.log(heightTop, heightBottom)
         // 对滑动后 currentY 值不足的情况进行修正
         let _this = this
         let deff = Math.abs(this.currentY - heightTop)
@@ -650,6 +656,8 @@ export default {
   },
   methods: {
     selectMenu (index) {
+      // console.log(this.currentIndex, index)
+      // console.log(this.currentY)
       let foodList = this.$refs.listWrapper.getElementsByClassName('food-list')
       let el = foodList[index]
       // console.log(el)
@@ -730,6 +738,9 @@ export default {
   /*padding: 0 12px;*/
   line-height: 54px;
 }
+.menu-item:last-child{
+  padding-bottom: 65px;
+}
 .active {
   position: relative;
   z-index: 10;
@@ -768,6 +779,9 @@ export default {
 .food-list {
   /*margin-top: 10px;*/
   padding-top: 15px;
+}
+.food-list:last-child{
+  padding-bottom: 80px;
 }
 .food-list ul {
   justify-content: space-between;
