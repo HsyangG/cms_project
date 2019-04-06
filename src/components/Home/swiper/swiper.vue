@@ -15,47 +15,70 @@
 </template>
 
 <script type="text/ecmascript-6">
-import NewsList from './../../News/NewsList'
-// import Logp from './../../Logp/Logp'
-import Phone from './../../views/phone/phone'
-import Intelligence from './../../views/intelligence/intelligence'
-import Television from './../../views/television/television'
-import Life from './../../views/life/life'
 import Swiper from 'swiper/dist/js/swiper.min'
 import 'swiper/dist/css/swiper.min.css'
+import { offEventHubListener } from '@/utils/index'
 export default {
+  props: {
+    list: {
+      type: Array,
+      default: function () {
+        return [
+          {router: {name: 'recommend'}, component: () => import('@/components/Recommend/RecommendList')},
+          {router: {name: 'phoneList'}, component: () => import('@/components/views/phone/phone')},
+          {router: {name: 'intelligenceList'}, component: () => import('@/components/views/intelligence/intelligence')},
+          {router: {name: 'televisionList'}, component: () => import('@/components/views/television/television')},
+          {router: {name: 'televisionList'}, component: () => import('@/components/views/television/television')},
+          {router: {name: 'lifeList'}, component: () => import('@/components/views/life/life')}
+          // {router: {name: 'news.list'}, component: NewsList},
+          // {router: {name: 'logp'}, component: Logp}
+        ]
+      }
+    }
+  },
   data () {
     return {
-      list: [
-        {router: {name: 'newsList'}, component: NewsList},
-        {router: {name: 'phoneList'}, component: Phone},
-        {router: {name: 'intelligenceList'}, component: Intelligence},
-        {router: {name: 'televisionList'}, component: Television},
-        {router: {name: 'televisionList'}, component: Television},
-        {router: {name: 'lifeList'}, component: Life}
-        // {router: {name: 'news.list'}, component: NewsList},
-        // {router: {name: 'logp'}, component: Logp}
-      ]
+      currentIndex: 0,
     }
   },
   mounted () {
-    let mySwiper = new Swiper('.swiper-container', {
-      // 设定初始时 slide 的索引
-      // initialSlide: this.$route.path === '/one' ? 0 : this.$route.path === '/two' ? 1 : this.$route.path === '/three' ? 2 : this.route.path === '/four' ? 3 : this.$route.path === '/five' ? 4 : 0
-    })
-    mySwiper.on('slideChange', () => { // 监控滑动后当前页面的索引，将索引发射到导航组件
+    let mySwiper = new Swiper('.swiper-container')
+
+    mySwiper.on('slideChange', () => {
+      // 监控滑动后当前页面的索引，将索引发射到导航组件
       // 左右滑动时将当前slide的索引发送到 nav 组件
       this.$root.eventHub.$emit('slideTab', mySwiper.activeIndex)
     })
+
     // 接收 nav 组件传过来的导航按钮索引值，跳转到相应的内容区
     this.$root.eventHub.$on('tabChange', (index) => {
-      mySwiper.slideTo(index, 1000, false)
+      this.currentIndex = index
+      mySwiper.slideTo(this.currentIndex, 1000, false)
     })
-    // console.log(mySwiper)
+    this.$root.eventHub.$on('orderTabChange', (index) => {
+      console.log('hello')
+      this.currentIndex = index
+      mySwiper.slideTo(this.currentIndex, 1000, false)
+    }) // 刷新页面数据会被清空
+  },
+  methods: {
+    offEventHubListener () {
+      this.$root.eventHub.$off('orderTabChange')
+      this.$root.eventHub.$off('tabChange')
+    }
+  },
+  beforeDestroy () {
+    /**
+     * 在目标组件销毁之前需要解绑事件监听
+     * 否则会触发多次
+     * 因为组件销毁时 this.$root.eventHub 不会销毁
+     * 所有的监听事件会叠加
+     */
+    this.offEventHubListener()
   }
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>

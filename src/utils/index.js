@@ -1,4 +1,5 @@
 // 这里统一定义一些使用频率较高的函数
+import Vue from 'vue'
 import BScroll from 'better-scroll'
 export function initScroll (scroll, wrapper) {
   // better-scroll 在浏览器的手机模式下是要手动刷新页面才能产滚动的
@@ -22,4 +23,8 @@ export function toStopPrevent (dom) {
     event.preventDefault() // 阻止默认行为
     event.stopPropagation() // 阻止事件冒泡
   }, false)
+}
+
+export function offEventHubListener (_this, _event) {
+  this.$root.eventHub.$off(_event)
 }

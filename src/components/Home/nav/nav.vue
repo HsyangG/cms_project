@@ -14,7 +14,7 @@ export default {
   data () {
     return {
       navList: [
-        {className: 'cms-recommend', title: '推荐', router: {name: 'newsList'}},
+        {className: 'cms-recommend', title: '推荐', router: {name: 'recommend'}},
         {className: 'cms-phone', title: '手机', router: {name: 'phoneList'}},
         {className: 'cms-intelligence', title: '智能', router: {name: 'intelligenceList'}},
         {className: 'cms-television', title: '电视', router: {name: 'televisionList'}},
@@ -65,7 +65,13 @@ export default {
       // let href = index === 0 ? '/one' : index === 1 ? '/two' : index === 2 ? '/three' : index === 3 ? '/four' : index === 4 ? '/five' : '/one'
       // this.$router.push(href)
       console.log(this.nowIndex)
+    },
+    offEventHubListener () {
+      this.$root.eventHub.$off('slideTab')
     }
+  },
+  beforeDestroy () {
+    this.offEventHubListener()
   }
 }
 </script>

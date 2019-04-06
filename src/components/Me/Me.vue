@@ -14,21 +14,21 @@
       <div class="line"></div>
       <div class="payManage">
         <ul>
-          <li class="pendingPayment">
+          <li class="pendingPayment" @click="toWaitPay">
             <span class="icon-qianbao2"></span>
-            <span>待付款</span>
+            <span style="font-size: 12px;margin-top: 5px;">待付款</span>
           </li>
-          <li class="pendingReceipt">
+          <li class="pendingReceipt" @click="toWaitRececipt">
             <span class="icon-daishouhuo"></span>
-            <span>待收货</span>
+            <span style="font-size: 12px;margin-top: 5px;">待收货</span>
           </li>
-          <li class="comment">
+          <li class="comment" @click="toWaitEvaluation">
             <span class="icon-daipingjia"></span>
-            <span>待评价</span>
+            <span style="font-size: 12px;margin-top: 5px;">待评价</span>
           </li>
           <li class="afterSale">
             <span class="icon-weixiu"></span>
-            <span>退换修</span>
+            <span style="font-size: 12px;margin-top: 5px;">退换修</span>
           </li>
         </ul>
       </div>
@@ -36,52 +36,117 @@
       <div class="menuList">
         <ul>
           <li>
-            <span class="icon-youhuiquan1"></span>
-            <span>优惠券</span>
-            <span class="icon-you"></span>
+            <div class="menu_list_item">
+              <div class="menu_list_item_icon">
+                <span class="icon-youhuiquan1"></span>
+              </div>
+              <div class="menu_list_item_title">
+                <span>优惠券</span>
+              </div>
+              <div class="go_ahead">
+                <span class="icon-you"></span>
+              </div>
+            </div>
             <div class="line"></div>
           </li>
           <li>
-            <span><img src="./../../assets/img/vip.png" alt=""></span>
-            <span>会员福利</span>
-            <span class="icon-you"></span>
+            <div class="menu_list_item">
+              <div class="menu_list_item_icon">
+                <img src="./../../assets/img/vip.png" alt="">
+              </div>
+              <div class="menu_list_item_title">
+                <span>会员福利</span>
+              </div>
+              <div class="go_ahead">
+                <span class="icon-you"></span>
+              </div>
+            </div>
             <div class="line"></div>
           </li>
           <li>
-            <span class="icon-qianbao1"></span>
-            <span>我的钱包</span>
-            <span class="icon-you"></span>
+            <div class="menu_list_item">
+              <div class="menu_list_item_icon">
+                <span class="icon-qianbao1"></span>
+              </div>
+              <div class="menu_list_item_title">
+                <span>我的钱包</span>
+              </div>
+              <div class="go_ahead">
+                <span class="icon-you"></span>
+              </div>
+            </div>
             <div class="line"></div>
           </li>
           <li>
-            <span><img src="./../../assets/img/fuwuwangdian.png" alt=""></span>
-            <span>服务中心</span>
-            <span class="icon-you"></span>
+            <div class="menu_list_item">
+              <div class="menu_list_item_icon">
+                <img src="./../../assets/img/fuwuwangdian.png" alt="">
+              </div>
+              <div class="menu_list_item_title">
+                <span>服务中心</span>
+              </div>
+              <div class="go_ahead">
+                <span class="icon-you"></span>
+              </div>
+            </div>
             <div class="line"></div>
           </li>
           <li>
-            <span class="icon-shangdian1"></span>
-            <span>小米之家</span>
-            <span class="icon-you"></span>
+            <div class="menu_list_item">
+              <div class="menu_list_item_icon">
+                <span class="icon-shangdian1"></span>
+              </div>
+              <div class="menu_list_item_title">
+                <span>小米之家</span>
+              </div>
+              <div class="go_ahead">
+                <span class="icon-you"></span>
+              </div>
+            </div>
             <div class="line"></div>
           </li>
           <li>
-            <span class="icon-hezuo"></span>
-            <span>直供点</span>
-            <span class="icon-you"></span>
+            <div class="menu_list_item">
+              <div class="menu_list_item_icon">
+                <span class="icon-hezuo"></span>
+              </div>
+              <div class="menu_list_item_title">
+                <span>直供点</span>
+              </div>
+              <div class="go_ahead">
+                <span class="icon-you"></span>
+              </div>
+            </div>
             <div class="line"></div>
           </li>
           <li>
-            <span class="icon-gengduo"></span>
-            <span>更多功能</span>
-            <span class="icon-you"></span>
+            <div class="menu_list_item">
+              <div class="menu_list_item_icon">
+                <span class="icon-gengduo"></span>
+              </div>
+              <div class="menu_list_item_title">
+                <span>更多功能</span>
+              </div>
+              <div class="go_ahead">
+                <span class="icon-you"></span>
+              </div>
+            </div>
             <div class="line"></div>
           </li>
           <li class="split"></li>
           <li>
-            <span class="icon-shezhi1"></span>
-            <span>设置</span>
-            <span class="icon-you"></span>
+            <div class="menu_list_item">
+              <div class="menu_list_item_icon">
+                <span class="icon-shezhi1"></span>
+              </div>
+              <div class="menu_list_item_title">
+                <span>设置</span>
+              </div>
+              <div class="go_ahead">
+                <span class="icon-you"></span>
+              </div>
+            </div>
+            <div class="line"></div>
           </li>
           <li></li>
         </ul>
@@ -124,6 +189,15 @@ export default {
     },
     toMyOrder () {
       this.$router.push('/me/mine_order')
+    },
+    toWaitPay () {
+      this.$router.push('/me/mine_order?index=' + 1)
+    },
+    toWaitRececipt () {
+      this.$router.push('/me/mine_order?index=' + 2)
+    },
+    toWaitEvaluation () {
+      this.$router.push('/me/mine_order?index=' + 3)
     }
   }
 }
@@ -187,26 +261,59 @@ export default {
 }
 .payManage{
   width: 100%;
-  height: 103px;
+  height: 93px;
 }
 .payManage li{
   float: left;
   width: 25%;
-  height: 100%;
+  height: 93px;
   text-align: center;
+  font-size: 20px;
 }
 .payManage li span{
   display: block;
 }
 .payManage li span:first-child{
-  margin-top: 30px;
+  margin-top: 25px;
 }
 .menuList ul li{
   position: relative;
   width: 100%;
-  height: 60px;
+  height: 50px;
+  box-sizing: border-box;
+  padding-left: 55px;
 }
-.menuList ul li span:first-child{
+.menu_list_item{
+  display: flex;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 0 15px 0 0;
+}
+.menu_list_item_icon{
+  position: absolute;
+  top: 0;
+  left: 15px;
+  width: 40px;
+  line-height: 52px; /* 把字体撑下去，否则不会对齐 */
+  text-align: left;
+  font-size: 20px;
+}
+.menu_list_item_icon img{
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+}
+.menu_list_item_title{
+  width: 100%;
+  line-height: 50px;
+  text-align: left;
+}
+.go_ahead{
+  line-height: 50px;
+}
+
+/* .menuList ul li span:first-child{
   position: absolute;
   left: 20px;
   bottom: 20px;
@@ -234,7 +341,7 @@ export default {
   left: 0;
   width: 85%;
   margin-left: 15%;
-}
+} */
 .split{
   width: 100%;
   height: 16px;

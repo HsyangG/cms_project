@@ -79,7 +79,7 @@
       <div class="barContent conWrapper" ref="conWrapper"></div>-->
       <v-header></v-header>
       <v-nav></v-nav>
-      <v-swiper></v-swiper>
+      <v-swiper :list="routersList"></v-swiper>
       <div style="width: 100%;height: 42px;"></div>
       <bt-menu></bt-menu>
     </div>
@@ -100,7 +100,18 @@ export default {
         {className: 'cms-goodsShow', title: '商品展示', router: {name: 'news.list'}},
         {className: 'cms-feedback', title: '留言反馈', router: {name: 'news.list'}},
         {className: 'cms-search', title: '搜索资讯', router: {name: 'news.list'}},
-        {className: 'cms-callMe', title: '联系我们', router: {name: 'login'}}]
+        {className: 'cms-callMe', title: '联系我们', router: {name: 'login'}}
+      ],
+      routersList: [
+        {router: {name: 'recommend'}, component: () => import('@/components/Recommend/RecommendList')},
+        {router: {name: 'phoneList'}, component: () => import('@/components/views/phone/phone')},
+        {router: {name: 'intelligenceList'}, component: () => import('@/components/views/intelligence/intelligence')},
+        {router: {name: 'televisionList'}, component: () => import('@/components/views/television/television')},
+        {router: {name: 'televisionList'}, component: () => import('@/components/views/television/television')},
+        {router: {name: 'lifeList'}, component: () => import('@/components/views/life/life')}
+        // {router: {name: 'news.list'}, component: NewsList},
+        // {router: {name: 'logp'}, component: Logp}
+      ]
     }
   },
   // created创建组件的生命周期函数中，可以操作数据

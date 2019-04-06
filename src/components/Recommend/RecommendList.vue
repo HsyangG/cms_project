@@ -1,6 +1,6 @@
 <template>
   <transition name="move">
-    <div class="newsList newsListWrapper" ref="newsListWrapper">
+    <div class="recommendList recommendListWrapper" ref="recommendListWrapper">
       <div class="listContent">
         <div class="carouselMap">
           <v-carousel></v-carousel>
@@ -14,7 +14,7 @@
         </div>
         <div class="shopList">
           <div class="content">
-            <div class="contentLeft">
+            <div class="contentLeft" @click="toRecommendInfo">
               <img src="http://localhost:3000/public/img/commodities/redminode7.png" alt="" style="width: 100%;height: 100%">
             </div>
             <div class="splitDiv"></div>
@@ -70,7 +70,7 @@ import Submenu from './../Submenu/submenu'
 import { initScroll } from './../../utils'
 
 export default {
-  name: 'news-list',
+  name: 'recommendList',
   components: {
     VCarousel,
     'v-submenu': Submenu
@@ -115,28 +115,14 @@ export default {
       .catch(err => console.log('新闻列表异常', err)) */
   },
   mounted () {
-    this.addSubmitMeuList()
-    // this._initScroll()
     this.$nextTick(() => {
-      initScroll(this.scroll, this.$refs.newsListWrapper)
+      initScroll(this.scroll, this.$refs.recommendListWrapper)
     })
   },
   methods: {
-    addSubmitMeuList () {
-      // console.log(this.$refs.submitList)
-      // console.log(this.$refs.submitList)
+    toRecommendInfo () {
+      this.$router.push('/recommend/recommend_info?id=' + 25)
     }
-    /* _initScroll () {
-      this.$nextTick(() => {
-        if (!this.scroll) {
-          this.scroll = new BScroll(this.$refs.newsListWrapper, {
-            click: true
-          })
-        } else {
-          this.scroll.refresh()
-        }
-      })
-    } */
   }
 }
 </script>
@@ -145,12 +131,7 @@ export default {
   .cms-s-header {
     background-color: #f7f7f7
   }
-  .listContent{
-    width: 100%;
-    height: 3000px;
-    overflow: hidden;
-  }
-  .newsList{
+  .recommendList{
     width: 100%;
     height: 650px;
     overflow: hidden;
@@ -158,6 +139,11 @@ export default {
   }
   .move-enter, .move-leave-active{
     transform: translate3d(100%,0,0)
+  }
+  .listContent{
+    width: 100%;
+    height: 3000px;
+    overflow: hidden;
   }
   .mapList li{
     width: 100%;

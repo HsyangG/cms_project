@@ -7,7 +7,7 @@
         </div>
         <v-header :scanShow="false"></v-header>
       </div>
-      <div class="newsList newsListWrapper" ref="listWrapper">
+      <div class="recommendList recommendListWrapper" ref="listWrapper">
         <div class="listContent">
           <div class="carouselMap">
             <v-carousel></v-carousel>
@@ -121,7 +121,7 @@ export default {
     height: 3000px;
     overflow: hidden;
   }
-  .newsList{
+  .recommendList{
     width: 100%;
     height: 650px;
     overflow: hidden;

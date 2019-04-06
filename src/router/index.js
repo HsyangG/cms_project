@@ -7,7 +7,7 @@ import Me from '@/components/Me/Me'
 import Member from '@/components/Member/Member'
 import Search from '@/components/Search/Search'
 import Shopcart from '@/components/Shopcart/Shopcart'
-import NewsList from '@/components/News/NewsList'
+import RecommendList from '@/components/Recommend/RecommendList'
 import Login from '@/components/Login/Login'
 import Logp from '@/components/Logp/Logp'
 import Register from '@/components/Register/Register'
@@ -63,16 +63,21 @@ export default new Router({
       name: 'search',
       component: Search
     },
-    // 新闻列表
+    // 推荐列表
     {
-      name: 'newsList',
-      path: '/news/list', // 锚点值
-      component: NewsList
+      name: 'recommendList',
+      path: '/recommend/list', // 锚点值
+      component: RecommendList
     },
     {
       name: 'recommendList',
-      path: '/news/recommend_list',
-      component: () => import('@/components/News/list')
+      path: '/recommend/recommend_list',
+      component: () => import('@/components/Recommend/list')
+    },
+    {
+      name: 'recommendInfo',
+      path: '/recommend/recommend_info',
+      component: () => import('@/components/Recommend/recommendInfo')
     },
     {
       name: 'phoneList',
