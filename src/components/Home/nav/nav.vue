@@ -1,7 +1,7 @@
 <template>
   <div class="nav navWrapper" ref="navWrapper">
     <ul class="nav-list navList" ref="navList">
-      <li class="item" v-for="(item, index) in navList" :key="index" :class="{'active': nowIndex===index}" @click="tabClick(index)">
+      <li class="item" v-for="(item, index) in navList" :key="index" :class="{'active': nowIndex===index}" @click.prevent="tabClick(index)">
         {{item.title}}
       </li>
     </ul>

@@ -3,26 +3,26 @@
     <div class="content" ref="content">
       <div class="meHeader">
         <div class="me_login">
-          <img src="@/assets/img/avatar_default.png" alt="" @click.prevent="toLogin">
+          <img src="@/assets/img/avatar_default.png" alt="" @click.prevent.prevent="toLogin">
           <div>登录/注册</div>
         </div>
       </div>
-      <div class="myOrder" @click="toMyOrder">
+      <div class="myOrder" @click.prevent="toMyOrder">
         <div class="myOrder_left">我的订单</div>
         <div class="myOrder_right">全部订单 <svg-icon icon-class="qianjin" style="color: #ccc !important;"></svg-icon></div>
       </div>
       <div class="line"></div>
       <div class="payManage">
         <ul>
-          <li class="pendingPayment" @click="toWaitPay">
+          <li class="pendingPayment" @click.prevent="toWaitPay">
             <span class="icon-qianbao2"></span>
             <span style="font-size: 12px;margin-top: 5px;">待付款</span>
           </li>
-          <li class="pendingReceipt" @click="toWaitRececipt">
+          <li class="pendingReceipt" @click.prevent="toWaitRececipt">
             <span class="icon-daishouhuo"></span>
             <span style="font-size: 12px;margin-top: 5px;">待收货</span>
           </li>
-          <li class="comment" @click="toWaitEvaluation">
+          <li class="comment" @click.prevent="toWaitEvaluation">
             <span class="icon-daipingjia"></span>
             <span style="font-size: 12px;margin-top: 5px;">待评价</span>
           </li>

@@ -1,22 +1,22 @@
 <template>
   <div class="bt_menu">
-    <div id="home" @click="toHome">
+    <div id="home" @click.prevent="toHome">
       <span class="icon-shouye"></span>
       <span class="meun_text">首页</span>
     </div>
-    <div id="sort" @click="toSort">
+    <div id="sort" @click.prevent="toSort">
       <span class="icon-fenlei"></span>
       <span class="meun_text">分类</span>
     </div>
-    <!--<div id="find" @click="toFind">
+    <!--<div id="find" @click.prevent="toFind">
       <span class="icon-faxian2"></span>
       <span class="meun_text">发现</span>
     </div>-->
-    <div id="shopcart" @click="toShopcart">
+    <div id="shopcart" @click.prevent="toShopcart">
       <span class="icon-gouwuche"></span>
       <span class="meun_text">购物车</span>
     </div>
-    <div id="me" @click="toMe">
+    <div id="me" @click.prevent="toMe">
       <span class="icon-wode"></span>
       <span class="meun_text">我的</span>
     </div>

@@ -48,6 +48,7 @@ login.post('/logp', function (req, res) {
    */
   res.setHeader('Access-Control-Allow-Origin', '*')
   let body = req.body
+  console.log(body)
   UserReg.findOne({
     telNumber: body.telNumber,
     userPwd: md5(md5(body.userPwd))

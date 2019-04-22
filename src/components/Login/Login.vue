@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <div class="back" @click.prevent="toMe"><svg-icon icon-class="houtui"></svg-icon></div>
+    <div class="back" @click.prevent.prevent="toMe"><svg-icon icon-class="houtui"></svg-icon></div>
     <h3>短信登录</h3>
     <div class="verify" v-show="verShowTip"><p>该账号未注册！</p></div>
     <div class="verify" v-if="errors.length"><p v-for="error in errors" :key="error.index">{{error}}</p></div>
@@ -11,15 +11,15 @@
       <div class="get-ver">
         <input class="auth_input" type="number" v-model="RegForm.authCode" placeholder="输入验证码">
         <div class="get_auth_code" ref="getAuth">
-          <span v-show="sendAuthCode" class="auth_text auth_text_blue" @click="getAuthCode">获取验证码</span>
+          <span v-show="sendAuthCode" class="auth_text auth_text_blue" @click.prevent="getAuthCode">获取验证码</span>
           <span v-show="!sendAuthCode" class="auth_text"><span class="auth_text_blue">{{auth_time}}</span> 秒后重发</span>
         </div>
       </div>
       <div class="sub">
-        <button type="submit" class="submitBtn" @click="submit" :loading="logining">登录</button>
-        <div class="usingP" @click="toLog">密码登录</div>
+        <button type="submit" class="submitBtn" @click.prevent="submit" :loading="logining">登录</button>
+        <div class="usingP" @click.prevent="toLog">密码登录</div>
         <hr>
-        <p>没有账号，马上去 <span class="to" @click="toReg">注册</span></p>
+        <p>没有账号，马上去 <span class="to" @click.prevent="toReg">注册</span></p>
       </div>
     </form>
   </div>

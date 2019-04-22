@@ -149,7 +149,7 @@ export default {
     <div class="mask">
       <ul class="control">
         <li v-for="(item,index) in img" :key="index" :class="{'on': index===nowIndex}">
-          <a @click="goto (index)"></a>
+          <a @click.prevent="goto (index)"></a>
         </li>
       </ul>
     </div>

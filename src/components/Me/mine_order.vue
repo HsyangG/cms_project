@@ -3,7 +3,7 @@
     <div class="container">
       <div class="listContent">
         <div class="header">
-          <div class="go_back" @click.prevent="goBack">
+          <div class="go_back" @click.prevent.prevent="goBack">
             <svg-icon icon-class="houtui"></svg-icon>
           </div>
           <div class="title">我的订单</div>
@@ -19,9 +19,9 @@
           <ul>
             <li v-for="(item, index) in menu_list" :key="index">
               <!-- <transition name="move">
-                <div :class="{'active': currentIndex == index}" @click="tabClick(index)">{{ item }}</div>
+                <div :class="{'active': currentIndex == index}" @click.prevent="tabClick(index)">{{ item }}</div>
               </transition> -->
-              <div :class="{'active': currentIndex == index}" @click="tabClick(index)">{{ item }}</div>
+              <div :class="{'active': currentIndex == index}" @click.prevent="tabClick(index)">{{ item }}</div>
             </li>
           </ul>
         </div>

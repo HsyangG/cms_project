@@ -1,28 +1,32 @@
 <template>
   <div class="register">
-    <div class="back" @click.prevent="toMe"><svg-icon icon-class="houtui"></svg-icon></div>
+    <div class="back" @click.prevent.prevent="toMe"><svg-icon icon-class="houtui"></svg-icon></div>
     <h3>注册账号</h3>
     <div class="verify" v-show="verShowTip"><p>该账号已存在！</p></div>
     <div class="verify" v-if="errors.length"><p v-for="error in errors" :key="error.index">{{error}}</p></div>
     <form id="login_form">
       <div class="login-group">
-        <input type="number" v-model="RegForm.tel" placeholder="手机号码">
+        <!-- 限制输入长度为10 -->
+        <input type="text" v-model="RegForm.username" placeholder="用户名" maxlength="10">
       </div>
       <div class="login-group">
-        <input type="password" v-model="RegForm.userPwd" placeholder="密码">
+        <input type="number" v-model="RegForm.phone" placeholder="手机号码">
+      </div>
+      <div class="login-group">
+        <input type="password" v-model="RegForm.password" placeholder="密码">
       </div>
     </form>
     <div class="get-ver">
       <input class="auth_input" type="number" v-model="RegForm.authCode" placeholder="输入验证码">
       <div class="get_auth_code" ref="getAuth">
-        <span v-show="sendAuthCode" class="auth_text auth_text_blue" @click="getAuthCode">获取验证码</span>
+        <span v-show="sendAuthCode" class="auth_text auth_text_blue" @click.prevent="getAuthCode">获取验证码</span>
         <span v-show="!sendAuthCode" class="auth_text"><span class="auth_text_blue">{{auth_time}}</span> 秒后重发</span>
       </div>
     </div>
     <form class="sub">
-      <button type="success" class="submitBtn" @click="submit" :loading="logining">注册</button>
+      <button type="success" class="submitBtn" @click.prevent="submit" :loading="logining">注册</button>
       <hr>
-      <p>已有账号，马上去 <span class="to" @click="tologin">登录</span></p>
+      <p>已有账号，马上去 <span class="to" @click.prevent="tologin">登录</span></p>
     </form>
   </div>
 </template>
@@ -33,8 +37,10 @@ export default {
   data () {
     return {
       RegForm: {
-        tel: '',
-        userPwd: '',
+        username: '',
+        phone: '',
+        password: '',
+        avatar: '',
         authCode: ''
       },
       verShowTip: false,
@@ -48,8 +54,8 @@ export default {
   methods: {
     getAuthCode: function () {
       // 验证输入号码是否合法
-      let tel = this.RegForm.tel
-      let pwd = this.RegForm.userPwd
+      let tel = this.RegForm.phone
+      let pwd = this.RegForm.password
       // 每次进来先把 errors 置空，否则会影响本次判断
       this.errors = []
       if (!tel) {
@@ -63,8 +69,8 @@ export default {
         this.errors.push('密码必须是8-16位')
       }
       if (this.errors.length) return false
-      this.verification = this.RegForm.tel
-      let url = '/auth?telNumber=' + tel
+      this.verification = this.RegForm.phone
+      let url = '/api/get_auth_code?phone=' + tel
       this.$axios.get(url)
         .then(function (res) {
           console.log('请求成功', res)
@@ -96,9 +102,10 @@ export default {
       // 先校验输入是否合法
       this.checkForm()
       if (this.errors.length) return false
-      this.$axios.post('/register', qs.stringify({
-        telNumber: this.RegForm.tel,
-        userPwd: this.RegForm.userPwd,
+      this.$axios.post('/api/register', qs.stringify({
+        username: this.RegForm.username,
+        phone: this.RegForm.phone,
+        password: this.RegForm.password,
         authCode: this.RegForm.authCode
       }))
         .then(res => {
@@ -114,8 +121,8 @@ export default {
     },
     // 表单校验
     checkForm: function () {
-      let tel = this.RegForm.tel
-      let pwd = this.RegForm.userPwd
+      let tel = this.RegForm.phone
+      let pwd = this.RegForm.password
       let auth = this.RegForm.authCode
       // 每次进来先把 errors 置空，否则会影响本次判断
       this.errors = []

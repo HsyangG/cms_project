@@ -14,7 +14,7 @@
         </div>
         <div class="shopList">
           <div class="content">
-            <div class="contentLeft" @click="toRecommendInfo">
+            <div class="contentLeft" @click.prevent="toRecommendInfo">
               <img src="http://localhost:3000/public/img/commodities/redminode7.png" alt="" style="width: 100%;height: 100%">
             </div>
             <div class="splitDiv"></div>

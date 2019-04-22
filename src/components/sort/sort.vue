@@ -4,7 +4,7 @@
     <div class="sort-content">
       <div class="goodsWrapper" ref="goodsWrapper">
         <ul>
-          <li v-for="(item, index) in goods" :key="index" class="menu-item" :class="{'active': currentIndex === index || index === goods.length}" @click.prevent="selectMenu(index)">
+          <li v-for="(item, index) in goods" :key="index" class="menu-item" :class="{'active': currentIndex === index || index === goods.length}" @click.prevent.prevent="selectMenu(index)">
             <div class="text">{{ item.name }}</div>
           </li>
           <!--<li>-->

@@ -2,11 +2,11 @@
   <div class="submenu">
     <ul>
       <li v-for="(item, index) in submitItemList" :class="item.class" ref="submitList" :key="index">
-        <div v-if="submenuType == 1" class="submenu-item" @click="toList(index)">
+        <div v-if="submenuType == 1" class="submenu-item" @click.prevent="toList(index)">
           <img :src="item.imgUrl" alt="" style="margin-top: 5px">
           <p style="margin-top: 3px">{{ item.text }}</p>
         </div>
-        <div v-if="submenuType == 2" class="submenu-item" @click="toListWithoutCarousel(index)">
+        <div v-if="submenuType == 2" class="submenu-item" @click.prevent="toListWithoutCarousel(index)">
           <img :src="item.imgUrl" alt="" style="margin-top: 5px">
           <p style="margin-top: 3px">{{ item.text }}</p>
         </div>
@@ -60,7 +60,7 @@ export default {
   },
   methods: {
     toList (index) {
-      this.$router.push('/news/recommend_list?id=' + index)
+      this.$router.push('/recommend/recommend_list?id=' + index)
     },
     toListWithoutCarousel (index) {
       this.$router.push('/views/television/list?id=' + index)

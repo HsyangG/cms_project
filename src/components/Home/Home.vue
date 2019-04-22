@@ -72,7 +72,7 @@
         <ul class="barList" ref="barList">
           <li v-for="grid in grids" :key="grid.index">
                 &lt;!&ndash;<span :class="grid.className"></span>&ndash;&gt;
-                <div class="gridTitle" @click="addContent">{{grid.title}}</div>
+                <div class="gridTitle" @click.prevent="addContent">{{grid.title}}</div>
           </li>
         </ul>
       </div>

@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <div class="back" @click.prevent="toMe"><svg-icon icon-class="houtui"></svg-icon></div>
+    <div class="back" @click.prevent.prevent="toMe"><svg-icon icon-class="houtui"></svg-icon></div>
     <h3>密码登录</h3>
     <div class="verify" v-show="verShowTip"><p>该账号未注册！</p></div>
     <div class="verify" v-if="errors.length"><p v-for="error in errors" :key="error.index">{{error}}</p></div>
@@ -10,10 +10,10 @@
         <input type="password" v-model="RegForm.userPwd" placeholder="8-16位密码">
       </div>
       <div class="sub">
-        <button type="submit" class="submitBtn" @click="submit" :loading="logining">登录</button>
-        <div class="usingP" @click="toLogin">短信登录</div>
+        <button type="submit" class="submitBtn" @click.prevent.prevent="submit" :loading="logining">登录</button>
+        <div class="usingP" @click.prevent="toLogin">短信登录</div>
         <hr>
-        <p>没有账号，马上去 <span class="to" @click="toReg">注册</span></p>
+        <p>没有账号，马上去 <span class="to" @click.prevent="toReg">注册</span></p>
       </div>
     </form>
   </div>
@@ -21,6 +21,7 @@
 
 <script type="text/ecmascript-6">
 import qs from 'qs'
+import request from '@/utils/request'
 export default {
   data () {
     return {
@@ -47,10 +48,15 @@ export default {
       // 先校验输入是否合法
       this.checkForm()
       if (this.errors.length) return false
-      this.$axios.post('/logp', qs.stringify({
-        telNumber: this.RegForm.tel,
-        userPwd: this.RegForm.userPwd
+      this.$axios.post('/api/logp', qs.stringify({
+        phone: this.RegForm.tel,
+        password: this.RegForm.userPwd
       }))
+      // request({
+      //   url: '/api/logp',
+      //   method: 'post',
+      //   data: this.RegForm
+      // })
         .then(res => {
           console.log(res.data)
           if (res.data.err_code === 1) {

@@ -3,17 +3,17 @@
     <div class="headerContent">
       <div class="scan"><i class="icon-saoyisao" v-show="scanShow"></i></div>
       <div class="search-group">
-        <div class="magnifier" @click="toHome(linkTo)" ref="mag">
+        <div class="magnifier" @click.prevent="toHome(linkTo)" ref="mag">
           <i class="icon-sousuo" v-show="magShow"></i>
           <i class="icon-zuo" v-show="!magShow"></i>
         </div>
         <input type="search" v-show="searchShow" :value="inputPlaceholder" ref="input">
-        <div class="inputText" v-show="!searchShow" @click="toHome">{{inputPlaceholder}}</div>
+        <div class="inputText" v-show="!searchShow" @click.prevent="toHome">{{inputPlaceholder}}</div>
         <div class="del" v-show="delBtn"><i class="icon-delete_fill"></i></div>
       </div>
       <div class="news">
         <i class="icon-pinglun" v-show="review"></i>
-        <span v-show="!review" @click="sendToSearch">搜索</span>
+        <span v-show="!review" @click.prevent="sendToSearch">搜索</span>
       </div>
     </div>
   </div>

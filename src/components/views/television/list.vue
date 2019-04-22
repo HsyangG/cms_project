@@ -1,7 +1,7 @@
 <template>
   <div class="television_list">
     <div class="list_header">
-      <div class="go_back" @click.prevent="goBack">
+      <div class="go_back" @click.prevent.prevent="goBack">
         <svg-icon icon-class="houtui"></svg-icon>
       </div>
       <v-header :scanShow="false"></v-header>

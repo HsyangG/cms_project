@@ -10,19 +10,22 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
+    // 开启代理服务器，解决跨域问题
     proxyTable:{
-      '/login': {
-        target: 'http://localhost:3000',
-        // changeOrigin: true,
-        // 这里理解成用‘/api’代替target里面的地址，后面组件中我们掉接口时直接用api代替 比如我要调用
-        // 'http://40.00.100.100:3002/user/add'，直接写‘/api/user/add’即可
-        // '^/api': ''
-      }
+      // '/api': {
+      //   target: 'http://localhost:3000',
+      //   changeOrigin: true,
+      //   // 这里理解成用‘/api’代替target里面的地址，后面组件中我们掉接口时直接用api代替 比如我要调用
+      //   // 'http://40.00.100.100:3002/user/add'，直接写‘/api/user/add’即可
+      //   // 这里的配置是正则表达式，以 /api 开头的将会被用 '/api' 替换掉，假如后台文档的接口是 /api/list/xxx
+      //   // 前端 api 接口写：axios.get('/api/list/xxx')，被处理之后实际访问的是: http://news.baidu.com/api/list/xxx
+      //   '^/api': '/'
+      // }
     },
 
 
     // Various Dev Server settings
-    host: '0.0.0.0', // can be overwritten by process.env.HOST
+    host: '127.0.0.1', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
