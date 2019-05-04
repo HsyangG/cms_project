@@ -17,6 +17,7 @@ import Register from '@/components/Register/Register'
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       // 首先进行重定向，重定向到首页
@@ -49,9 +50,22 @@ export default new Router({
       component: Me
     },
     {
+      path: '/me/user_information',
+      name: 'user_information',
+      component: () => import('@/components/views/userInformation/index'),
+      meta: { title: '个人资料' }
+
+    },
+    {
       name: 'my_order',
       path: '/me/mine_order',
       component: () => import('@/components/Me/mine_order')
+    },
+    {
+      path: '/me/setting',
+      name: 'setting',
+      component: () => import('@/components/Me/setting'),
+      meta: { title: '设置' }
     },
     {
       path: '/member',

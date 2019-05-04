@@ -1,6 +1,6 @@
 <template>
   <div class="register">
-    <div class="back" @click.prevent.prevent="toMe"><svg-icon icon-class="houtui"></svg-icon></div>
+    <div class="back" @click.prevent="toMe"><svg-icon icon-class="houtui"></svg-icon></div>
     <h3>注册账号</h3>
     <div class="verify" v-show="verShowTip"><p>该账号已存在！</p></div>
     <div class="verify" v-if="errors.length"><p v-for="error in errors" :key="error.index">{{error}}</p></div>
@@ -32,7 +32,9 @@
 </template>
 
 <script type="text/ecmascript-6">
+import request from '@/utils/request'
 import qs from 'qs'
+import { setInterval, clearTimeout, clearInterval } from 'timers';
 export default {
   data () {
     return {
@@ -41,14 +43,16 @@ export default {
         phone: '',
         password: '',
         avatar: '',
-        authCode: ''
+        authCode: '',
+        over: '',
       },
       verShowTip: false,
       logining: false,
       sendAuthCode: true, // 控制按钮的显示
       auth_time: 0, // 计时器，倒计时
       verification: '', // 绑定输入验证码框
-      errors: []
+      errors: [],
+      timer: null,
     }
   },
   methods: {
@@ -89,6 +93,16 @@ export default {
         }
       }, 1000)
     },
+    resetForm () {
+      this.RegForm = {
+        username: '',
+        phone: '',
+        password: '',
+        avatar: '',
+        authCode: '',
+        over: '',
+      }
+    },
     submit () {
       /* this.$refs.RegForm.validete(valid => {
         if (valid) {
@@ -102,21 +116,27 @@ export default {
       // 先校验输入是否合法
       this.checkForm()
       if (this.errors.length) return false
-      this.$axios.post('/api/register', qs.stringify({
-        username: this.RegForm.username,
-        phone: this.RegForm.phone,
-        password: this.RegForm.password,
-        authCode: this.RegForm.authCode
-      }))
+      this.$axios.post('/api/register', qs.stringify(this.RegForm))
         .then(res => {
-          console.log(res.data)
-          if (res.data.err_code === 1) {
+          console.log(res)
+          if (res.data.code == 1) {
             this.verShowTip = true
             return false
           }
+          if (res.data.code == 0) {
+            let _this = this
+            this.timer = setInterval(() => {
+              _this.$router.push('/me')
+              clearInterval(this.timer)
+            }, 500)
+          }
+          this.resetForm()
         })
         .catch(err => {
           console.log(err)
+        })
+        .finally(() => {
+          this.verShowTip = false
         })
     },
     // 表单校验

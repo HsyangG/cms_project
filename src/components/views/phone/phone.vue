@@ -3,7 +3,7 @@
     <div class="phoneList phoneListWrapper" ref="phoneListWrapper">
       <div class="listContent" ref="listContent">
         <div class="carouselMap">
-          <v-carousel></v-carousel>
+          <v-carousel :carouselList="carouselList"></v-carousel>
         </div>
         <ul class="submenu">
           <li v-for="(item, index) in submitItemList" :class="item.class" ref="submitList" :key="index">
@@ -16,7 +16,25 @@
           </li>
         </ul>
         <ul class="hotSellList">
-          <li>
+          <li v-for="item in shopList" :key="item.id" v-if="item.type == 'phone'">
+            <div class="hotSellListItem">
+              <div class="itemTitle">极具收藏价值的科技艺术品</div>
+              <div class="itemImage" style="width: 100%;height: 255px;background: rgba(0,0,0,0.5);">
+                <img v-if="item.picture" :src="item.picture" alt="" style="width: 100%;height: 100%">
+              </div>
+              <div class="itemBottom">
+                <div class="itemBottomLeft">
+                  <div class="itemBottomLeftTitle">{{item.name}}</div>
+                  <div class="itemBottomLeftDescription">{{item.brief}}</div>
+                </div>
+                <div class="itemBottomRight">
+                  <div class="itemPrice">&yen;{{item.price}}</div>
+                  <button class="success">立即购买</button>
+                </div>
+              </div>
+            </div>
+          </li>
+          <!-- <li>
             <div class="hotSellListItem">
               <div class="itemTitle">极具收藏价值的科技艺术品</div>
               <div class="itemImage" style="width: 100%;height: 235px;background: rgba(0,0,0,0.5);"></div>
@@ -47,23 +65,7 @@
                 </div>
               </div>
             </div>
-          </li>
-          <li>
-            <div class="hotSellListItem">
-              <div class="itemTitle">极具收藏价值的科技艺术品</div>
-              <div class="itemImage" style="width: 100%;height: 235px;background: rgba(0,0,0,0.5);"></div>
-              <div class="itemBottom">
-                <div class="itemBottomLeft">
-                  <div class="itemBottomLeftTitle">小米MIX 3 故宫特别版</div>
-                  <div class="itemBottomLeftDescription">磁动力滑盖全面屏，前后旗舰AI双摄</div>
-                </div>
-                <div class="itemBottomRight">
-                  <div class="itemPrice">&yen;4999</div>
-                  <button class="success">立即购买</button>
-                </div>
-              </div>
-            </div>
-          </li>
+          </li> -->
         </ul>
         <div class="goodGoods">
           <div class="goodGoodsTitle">好货推荐</div>
@@ -84,7 +86,7 @@
           </div>
         </div>
         <ul class="goodGoodsList">
-          <li>
+          <!-- <li>
             <div class="goodGoodsListLeft" style="width: 100%;height: 100%;">
               <div class="goodsListImage" style="width: 100%;height: 200px;background: rgba(0,0,0,0.5);margin-bottom: 20px">
                 <img src="" alt="">
@@ -102,6 +104,17 @@
               <p style="font-weight: 700;">小米9</p>
               <p style="font-size: 12px;margin-bottom: 5px;">骁龙855，索尼4800万三摄</p>
               <p style="font-size: 14px;color: red;">&yen;2999起</p>
+              <button class="success" style="width: 50%;margin-top: 2px">立即预约</button>
+            </div>
+          </li> -->
+          <li v-for="item in shopList" :key="item.id" v-if="item.type == 'phone'">
+             <div class="goodGoodsListRight" style="width: 100%;height: 100%;">
+              <div class="goodsListImage" style="width: 100%;height: 200px;background: rgba(0,0,0,0.5);margin-bottom: 20px">
+                <img v-if="item.picture" :src="item.picture" alt="" style="width: 100%;height: 100%">
+              </div>
+              <p style="font-weight: 700;">{{item.name}}</p>
+              <p style="font-size: 12px;margin-bottom: 5px;">{{item.brief}}</p>
+              <p style="font-size: 14px;color: red;">&yen;{{item.price}}起</p>
               <button class="success" style="width: 50%;margin-top: 2px">立即预约</button>
             </div>
           </li>
@@ -143,8 +156,14 @@ export default {
           text: '奇异果系列',
           class: 'submitList'
         }
-      ]
+      ],
+      shopList: null,
+      carouselList: null
     }
+  },
+  created () {
+    this.getShopList()
+    this.getCarousel()
   },
   mounted () {
     this.$nextTick(() => {
@@ -153,6 +172,24 @@ export default {
     })
   },
   methods: {
+    getShopList () {
+      this.$axios.get('/api/get_shops_info')
+      .then((response) => {
+        this.shopList = response.data.data
+      }).catch((err) => {
+        console.log(err)
+      });
+    },
+     getCarousel () {
+      this.$axios.get('/api/get_carousel')
+      .then((response) => {
+        // console.log(response.data)
+        this.carouselList = response.data.data
+        // console.log(this.carouselList)
+      }).catch((err) => {
+        console.log(err)
+      });
+    },
   }
 }
 </script>
@@ -272,12 +309,23 @@ export default {
     width: 50%;
     text-align: right;
   }
-  .goodGoodsList li{
+  .goodGoodsList{
     display: flex;
+    display: -webkit-flex;
+    justify-content: space-between;
+    flex-direction: row;
+    flex-wrap: wrap;
     width: 100%;
+    justify-content: space-between;
+    text-align: left;
+  }
+  .goodGoodsList li{
+    display: inline-block;
+    width: 49.4%;
     height: 345px;
     box-sizing: border-box;
     margin-top: 15px;
+    text-align: center;
   }
   .success{
     border: 0;

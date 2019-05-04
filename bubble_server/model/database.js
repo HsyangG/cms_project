@@ -4,13 +4,27 @@
 let mysql = require('mysql')
 let database = {}
 
+// 查询操作
+database.select = function (connection, sql, callback) {
+  let select = []
+  connection.query(sql, function (err, result) {
+    if (err) {
+      console.log(err)
+      return false
+    }
+    callback(result)
+  })
+  // console.log(select)
+}
+
 // 插入数据操作
 database.insert = function (connection, sql, params, callback) {
-  connection.query(sql, params, function (error, result, flieds) {
-    console.log(sql)
+  connection.query(sql, params, function (error, result) {
+    console.log(flieds)
     if (error) console.log(error)
     // callback(result.insertId) // 返回插入的 id
     console.log(result)
+    callback(result)
   })
 }
 

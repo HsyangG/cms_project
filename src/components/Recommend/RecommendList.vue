@@ -3,7 +3,7 @@
     <div class="recommendList recommendListWrapper" ref="recommendListWrapper">
       <div class="listContent">
         <div class="carouselMap">
-          <v-carousel></v-carousel>
+          <v-carousel :carouselList="carouselList"></v-carousel>
         </div>
         <v-submenu></v-submenu>
         <div class="line"></div>
@@ -15,30 +15,29 @@
         <div class="shopList">
           <div class="content">
             <div class="contentLeft" @click.prevent="toRecommendInfo">
-              <img src="http://localhost:3000/public/img/commodities/redminode7.png" alt="" style="width: 100%;height: 100%">
+              <img v-if="hot_shops" :src="hot_shops[0].picture" alt="" style="width: 100%;height: 100%">
             </div>
             <div class="splitDiv"></div>
             <div class="contentRight">
               <div class="contentRightTop">
-                <img src="http://localhost:3000/public/img/commodities/haowu.png" alt="" style="width: 100%;height: 100%;">
+                <img v-if="hot_shops" :src="hot_shops[1].picture" alt="" style="width: 100%;height: 100%">
               </div>
               <div class="contentRightButton">
-                <img src="http://localhost:3000/public/img/commodities/xiaomitv4a.png" alt="" style="width: 100%;height: 100%;">
+                <img v-if="hot_shops" :src="hot_shops[2].picture" alt="" style="width: 100%;height: 100%">
               </div>
             </div>
           </div>
           <div class="SpecialPart">
-            <img src="http://localhost:3000/public/img/commodities/xiaomi8.png" alt="">
+            <img v-if="hot_shops" :src="hot_shops[3].picture" alt="" style="width: 100%;height: 100%">
           </div>
           <div class="dailySelection">
             <div class="dailySelectionTitle">每日精选</div>
             <div class="dailySelectionContent"></div>
             <div class="dailySelectionContentList">
-              <ul>
-                <li>
-                  <!--想要两个 div 平均水平排列，需要用到 flex 布局，在标签上设置宽度，不能统一设置-->
+              <ul v-if="shopList">
+                <!-- <li v-if="shopList">
                   <div class="dailySelectContentListLeft"  style="width: 100%;height: 100%;">
-                    <img src="http://localhost:3000/public/img/commodities/redminode7.png" alt="" style="width: 100%;height: 270px;">
+                    <img src="http://localhost:3000/public/img/commodities/redminote7.png" alt="" style="width: 100%;height: 270px;">
                     <p class="dailyTitle">小米8</p>
                     <p class="dailyDescription">相机全新升级，骁龙845</p>
                     <div class="dailyPrice">
@@ -47,11 +46,41 @@
                   </div>
                   <div class="splitDiv"></div>
                   <div class="dailySelectContentListRight"  style="width: 100%;height: 100%;">
-                    <img src="http://localhost:3000/public/img/commodities/redminode7.png" alt="" style="width: 100%;height: 270px;">
+                    <img src="http://localhost:3000/public/img/commodities/redminote7.png" alt="" style="width: 100%;height: 270px;">
                     <p class="dailyTitle">小米8</p>
                     <p class="dailyDescription">相机全新升级，骁龙845</p>
                     <div class="dailyPrice">
                       <span class="dailyPriceNew">&yen;2299&nbsp;起 </span><span class="dailyPriceOld"> &yen;2699</span>
+                    </div>
+                  </div>
+                </li> -->
+                <!-- <li>
+                  <div class="dailySelectContentListLeft"  style="width: 100%;height: 100%;">
+                    <img src="http://localhost:3000/public/img/commodities/redminote7.png" alt="" style="width: 100%;height: 270px;">
+                    <p class="dailyTitle">小米8</p>
+                    <p class="dailyDescription">相机全新升级，骁龙845</p>
+                    <div class="dailyPrice">
+                      <span class="dailyPriceNew">&yen;2299&nbsp;起 </span><span class="dailyPriceOld"> &yen;2699</span>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="dailySelectContentListLeft"  style="width: 100%;height: 100%;">
+                    <img src="http://localhost:3000/public/img/commodities/redminote7.png" alt="" style="width: 100%;height: 270px;">
+                    <p class="dailyTitle">小米8</p>
+                    <p class="dailyDescription">相机全新升级，骁龙845</p>
+                    <div class="dailyPrice">
+                      <span class="dailyPriceNew">&yen;2299&nbsp;起 </span><span class="dailyPriceOld"> &yen;2699</span>
+                    </div>
+                  </div>
+                </li> -->
+                <li v-for="item in shopList" :key="item.id" v-if="item.type == 'phone'">
+                  <div class="dailySelectContentListLeft"  style="width: 100%;height: 100%;">
+                    <img v-if="item.picture" :src="item.picture" alt="" style="width: 100%;height: 270px;">
+                    <p class="dailyTitle">{{item.name}}</p>
+                    <p class="dailyDescription">{{item.brief}}</p>
+                    <div class="dailyPrice">
+                      <span class="dailyPriceNew">&yen;{{item.price}}&nbsp;起 </span><span class="dailyPriceOld" v-if="item.price != item.old_price"> &yen;{{item.old_price}}</span>
                     </div>
                   </div>
                 </li>
@@ -103,7 +132,10 @@ export default {
           text: '超值特卖',
           class: 'submitList'
         }
-      ]
+      ],
+      carouselList: [],
+      hot_shops: null,
+      shopList: null,
     }
   },
   // created适合操作数据
@@ -113,6 +145,9 @@ export default {
         this.newsList = res.data.message
       })
       .catch(err => console.log('新闻列表异常', err)) */
+      this.getCarousel()
+      this.getHotShops()
+      this.getShopList()
   },
   mounted () {
     this.$nextTick(() => {
@@ -120,6 +155,32 @@ export default {
     })
   },
   methods: {
+    getShopList () {
+      this.$axios.get('/api/get_shops_info')
+      .then((response) => {
+        this.shopList = response.data.data
+      }).catch((err) => {
+        console.log(err)
+      });
+    },
+     getCarousel () {
+      this.$axios.get('/api/get_carousel')
+      .then((response) => {
+        // console.log(response.data)
+        this.carouselList = response.data.data
+        // console.log(this.carouselList)
+      }).catch((err) => {
+        console.log(err)
+      });
+    },
+    getHotShops () {
+      this.$axios.get('/api/get_hot_shops')
+      .then((response) => {
+        this.hot_shops = response.data.data
+      }).catch((err) => {
+        console.log(err)
+      });
+    },
     toRecommendInfo () {
       this.$router.push('/recommend/recommend_info?id=' + 25)
     }
@@ -226,28 +287,45 @@ export default {
     height: 100%;
     box-sizing: border-box;
   }
-  /*.dailySelectionContentList ul{
-    width: 100%;
-    height: 100%;
-  }*/
-  .dailySelectionContentList ul li{
+  .dailySelectionContentList ul{
+    /* width: 100%; */
+    /* height: 100%; */
+    /* 实现均匀布局，又可换行 */
     display: flex;
+    display: -webkit-flex;
+    justify-content: space-between;
+    flex-direction: row;
+    flex-wrap: wrap;
     width: 100%;
+    justify-content: space-between;
+    text-align: left;
+  }
+  .dailySelectionContentList ul li{
+    /* display: flex; */
+    display: inline-block;
+    /* width: 100%; */
+    width: 49.4%;
     height: 350px;
     box-sizing: border-box;
     margin-bottom: 15px;
-    text-align: left;
+    /* text-align: left; */
   }
   .dailyTitle{
     color: black;
     margin-top: 15px;
+    padding-left: 10px;
+    box-sizing: border-box;
   }
   .dailyDescription{
     font-size: 14px;
+    padding-left: 10px;
+    box-sizing: border-box;
     color: #ccc;
   }
   .dailyPriceNew{
     font-size: 14px;
+    padding-left: 10px;
+    box-sizing: border-box;
     color: red
   }
   .dailyPriceOld{

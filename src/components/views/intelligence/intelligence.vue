@@ -3,7 +3,7 @@
     <div class="intelligenceList intelligenceListWrapper" ref="intelligenceListWrapper">
       <div class="listContent">
         <div class="carouselMap">
-          <v-carousel></v-carousel>
+          <v-carousel :carouselList="carouselList"></v-carousel>
         </div>
         <v-submenu :submitItemList="submenuItem"></v-submenu>
         <div class="listTitle">
@@ -11,7 +11,7 @@
         </div>
         <div class="goodsList">
           <ul>
-            <li>
+            <!-- <li>
               <div class="goodsListItem">
                 <img src="" alt="">
                 <div class="goodsListItemContent">
@@ -112,7 +112,20 @@
                   </div>
                 </div>
               </div>
+            </li> -->
+            <li v-for="item in shopList" :key="item.id" v-if="item.type != 'phone' && item.type != 'television' && item.type != 'computer'">
+              <div class="goodsListItem">
+                <img v-if="item.picture" :src="item.picture" alt="">
+                <div class="goodsListItemContent">
+                  <p>{{item.name}}</p>
+                  <div class="itemContentPrice">
+                    <span>&yen;2399 </span>
+                    <span> &yen;2799</span>
+                  </div>
+                </div>
+              </div>
             </li>
+            <li></li>
           </ul>
         </div>
       </div>
@@ -156,13 +169,39 @@ export default {
           text: '555',
           class: 'submitList'
         }
-      ]
+      ],
+      shopList: null,
+      carouselList: null
     }
+  },
+  created () {
+    this.getShopList()
+    this.getCarousel()
   },
   mounted () {
     this.$nextTick(() => {
       initScroll(this.scroll, this.$refs.intelligenceListWrapper)
     })
+  },
+  methods: {
+    getShopList () {
+      this.$axios.get('/api/get_shops_info')
+      .then((response) => {
+        this.shopList = response.data.data
+      }).catch((err) => {
+        console.log(err)
+      });
+    },
+     getCarousel () {
+      this.$axios.get('/api/get_carousel')
+      .then((response) => {
+        // console.log(response.data)
+        this.carouselList = response.data.data
+        // console.log(this.carouselList)
+      }).catch((err) => {
+        console.log(err)
+      });
+    },
   }
 }
 </script>
@@ -188,9 +227,21 @@ export default {
     text-align: center;
     font-size: 20px;
   }
-  .goodsList ul li {
+  .goodsList ul{
     display: flex;
+    display: -webkit-flex;
+    justify-content: space-between;
+    flex-direction: row;
+    flex-wrap: wrap;
     width: 100%;
+    justify-content: space-between;
+    text-align: left;
+  }
+  .goodsList ul li {
+    /* display: flex; */
+    display: inline-block;
+    /* width: 100%; */
+    width: 33%;
     height: 250px;
     box-sizing: border-box;
     margin-top: 15px;
@@ -202,13 +253,19 @@ export default {
   }
   .goodsListItem img{
     width: 100%;
-    height: 190px;
+    height: 170px;
     background-color: rgba(0,0,0,0.5);
   }
   .goodsListItemContent{
     text-align: left;
     font-size: 14px;
     padding: 10px 10px 0 10px;
+  }
+  .goodsListItemContent p{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
   }
   .itemContentPrice{
     margin-top: 5px;

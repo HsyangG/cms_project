@@ -25,7 +25,7 @@ service.interceptors.request.use(
     config.withCredentials = true
     config.credentials = 'same-origin'
 
-    console.log(config)
+    console.log(config.data.password)
     return config
   },
   error => {

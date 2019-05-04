@@ -317,21 +317,9 @@ export default {
             :class="{'dotted': index===currentIndex}"></li>
       </ul>
     </div>-->
-    <mt-swipe :auto="4000">
-        <!--<mt-swipe-item v-for="img in imgs" v-bind:key="img.index">
-          <img :src="img.img" alt="">
-        </mt-swipe-item>-->
-        <mt-swipe-item>
-          <img src="http://localhost:3000/public/img/01.jpg" alt="">
-        </mt-swipe-item>
-        <mt-swipe-item>
-          <img src="http://localhost:3000/public/img/02.jpg" alt="">
-        </mt-swipe-item>
-        <mt-swipe-item>
-          <img src="http://localhost:3000/public/img/03.jpg" alt="">
-        </mt-swipe-item>
-        <mt-swipe-item>
-          <img src="http://localhost:3000/public/img/04.jpg" alt="">
+    <mt-swipe :auto="4000" :style="{ height: height + 'px' }">
+        <mt-swipe-item v-show="carouselList" v-for="(item, index) in carouselList" :key="index" :style="{ height: height + 'px' }">
+          <img :src="item.link" alt="" :style="{ height: height + 'px' }">
         </mt-swipe-item>
       </mt-swipe>
   </div>
@@ -342,15 +330,27 @@ import {toStopPrevent} from '../../utils'
 
 export default {
   name: 'v-carousel',
+  props: {
+    carouselList: {
+      type: Array,
+      default: () => {
+        return []
+      }
+    },
+    height: {
+      type: Number,
+      default: 200
+    }
+  },
   data () {
     return {
       /**
        * 轮播图数据
        */
-      carouselList: ['http://localhost:3000/public/img/01.jpg',
-        'http://localhost:3000/public/img/02.jpg',
-        'http://localhost:3000/public/img/03.jpg',
-        'http://localhost:3000/public/img/04.jpg'],
+      // carouselList: ['http://localhost:3000/public/img/01.jpg',
+      //   'http://localhost:3000/public/img/02.jpg',
+      //   'http://localhost:3000/public/img/03.jpg',
+      //   'http://localhost:3000/public/img/04.jpg'],
       slideList: [
         {title: 1},
         {title: 2},
@@ -376,8 +376,6 @@ export default {
         transform: `translate3d(${this.distance}px, 0, 0)`
       }
     }
-  },
-  created () {
   },
   mounted () {
     this.$nextTick(() => {
@@ -441,12 +439,12 @@ export default {
   .slide-fade-enter {
     transform: translate3d(100%,0,0);
   }
-  .carousel-img-container {
+  /* .carousel-img-container {
     position: relative;
     overflow: hidden;
     width: 100%;
     height: 200px;
-  }
+  } */
   .carousel-img-container li {
     width: 100%;
     height: 100%;
@@ -456,7 +454,7 @@ export default {
     width: 100%;
     height: 100%;
   }
-  .container{
+  /* .container{
     position: relative;
     width: 100%;
     height: 200px;
@@ -477,7 +475,7 @@ export default {
   }
   .mint-swipe {
     height: 200px;
-  }
+  } */
   img {
     width: 100%;
   }

@@ -3,7 +3,7 @@
     <div class="televisionList televisionWrapper" ref="televisionWrapper">
       <div class="listContent">
         <div class="carouselMap">
-          <v-carousel></v-carousel>
+          <v-carousel :carouselList="carouselList" :height="305"></v-carousel>
         </div>
         <v-submenu :submenuType="submenuType"></v-submenu>
         <div class="listTitle">
@@ -11,8 +11,7 @@
         </div>
         <div class="dailySelectionContentList">
           <ul>
-            <li>
-              <!--想要两个 div 平均水平排列，需要用到 flex 布局，在标签上设置宽度，不能统一设置-->
+            <!-- <li>
               <div class="dailySelectContentListLeft"  style="width: 100%;height: 100%;background: #fff;">
                 <img src="http://localhost:3000/public/img/commodities/redminode7.png" alt="" style="width: 100%;height: 200px;">
                 <p class="dailyTitle">小米8</p>
@@ -34,7 +33,6 @@
               </div>
             </li>
             <li>
-              <!--想要两个 div 平均水平排列，需要用到 flex 布局，在标签上设置宽度，不能统一设置-->
               <div class="dailySelectContentListLeft"  style="width: 100%;height: 100%;background: #fff;">
                 <img src="http://localhost:3000/public/img/commodities/redminode7.png" alt="" style="width: 100%;height: 200px;">
                 <p class="dailyTitle">小米8</p>
@@ -46,6 +44,17 @@
               </div>
               <div class="splitDiv"></div>
               <div class="dailySelectContentListRight"  style="width: 100%;height: 100%;background: #fff;">
+                <img src="http://localhost:3000/public/img/commodities/redminode7.png" alt="" style="width: 100%;height: 200px;">
+                <p class="dailyTitle">小米8</p>
+                <p class="dailyDescription">相机全新升级，骁龙845</p>
+                <div class="dailyPrice">
+                  <span class="dailyPriceNew">&yen;2299&nbsp;起 </span><span class="dailyPriceOld"> &yen;2699</span>
+                </div>
+                <button class="success" style="width: 50%;margin-top: 2px;">立即预约</button>
+              </div>
+            </li> -->
+            <li>
+              <div class="dailySelectContentListLeft"  style="width: 100%;height: 100%;background: #fff;">
                 <img src="http://localhost:3000/public/img/commodities/redminode7.png" alt="" style="width: 100%;height: 200px;">
                 <p class="dailyTitle">小米8</p>
                 <p class="dailyDescription">相机全新升级，骁龙845</p>
@@ -72,13 +81,37 @@ export default {
   },
   data () {
     return {
-      submenuType: 2 // 1 是有轮播图的详情页，2 是没有轮播图的详情页
+      submenuType: 2, // 1 是有轮播图的详情页，2 是没有轮播图的详情页
+      carouselList: null,
+      shopList: null
     }
   },
   created () {
     this.$nextTick(() => {
       initScroll(this.scroll, this.$refs.televisionWrapper)
     })
+    this.getShopList()
+    this.getCarousel()
+  },
+  methods: {
+    getShopList () {
+      this.$axios.get('/api/get_shops_info')
+      .then((response) => {
+        this.shopList = response.data.data
+      }).catch((err) => {
+        console.log(err)
+      });
+    },
+     getCarousel () {
+      this.$axios.get('/api/get_carousel')
+      .then((response) => {
+        // console.log(response.data)
+        this.carouselList = response.data.data
+        // console.log(this.carouselList)
+      }).catch((err) => {
+        console.log(err)
+      });
+    },
   }
 }
 
@@ -126,12 +159,19 @@ export default {
   height: 100%;
   box-sizing: border-box;
 }
-/*.dailySelectionContentList ul{
-  width: 100%;
-  height: 100%;
-}*/
-.dailySelectionContentList ul li{
+.dailySelectionContentList ul{
   display: flex;
+  display: -webkit-flex;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: space-between;
+  text-align: left;
+}
+.dailySelectionContentList ul li{
+  /* display: flex; */
+  display: inline-block;
   width: 100%;
   height: 305px;
   box-sizing: border-box;

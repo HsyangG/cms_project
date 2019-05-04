@@ -2,8 +2,12 @@
   <div class="me wrapper" ref="wrapper">
     <div class="content" ref="content">
       <div class="meHeader">
-        <div class="me_login">
-          <img src="@/assets/img/avatar_default.png" alt="" @click.prevent.prevent="toLogin">
+        <div class="me_login" v-if="user_info.login_status == 1">
+          <img src="@/assets/img/avatar_default.png" alt="" @click.prevent="toUserInformation">
+          <div @click.prevent.prevent="toUserInformation">{{user_info.username}}</div>
+        </div>
+        <div class="me_login" v-else>
+          <img src="@/assets/img/avatar_default.png" alt="" @click.prevent="toLogin">
           <div>登录/注册</div>
         </div>
       </div>
@@ -35,7 +39,7 @@
       <div class="split"></div>
       <div class="menuList">
         <ul>
-          <li>
+          <!-- <li>
             <div class="menu_list_item">
               <div class="menu_list_item_icon">
                 <span class="icon-youhuiquan1"></span>
@@ -133,9 +137,9 @@
             </div>
             <div class="line"></div>
           </li>
-          <li class="split"></li>
+          <li class="split"></li> -->
           <li>
-            <div class="menu_list_item">
+            <div class="menu_list_item" @click="toSetting">
               <div class="menu_list_item_icon">
                 <span class="icon-shezhi1"></span>
               </div>
@@ -161,12 +165,29 @@ import BScroll from 'better-scroll'
 export default {
   data () {
     return {
+      user_info: {
+        user_id: '',
+        phone: '',
+        username: '',
+        login_status: '', // 0 未登录  1 已登录
+      },
     }
+  },
+  created () {
+    this.getUserInfo()
   },
   mounted () {
     this.initScroll()
+    // console.log(localStorage)
   },
   methods: {
+    getUserInfo () {
+      // this.$axios.get('/api/user/info')
+      this.user_info.user_id = localStorage.user_id
+      this.user_info.phone = localStorage.phone
+      this.user_info.username = localStorage.username
+      this.user_info.login_status = localStorage.login_status
+    },
     initScroll () {
       this.$nextTick(() => {
         if (!this.scroll) {
@@ -187,17 +208,43 @@ export default {
     toLogin () {
       this.$router.push('/callme/logp')
     },
+    toUserInformation () {
+      this.$router.push('/me/user_information')
+    },
     toMyOrder () {
-      this.$router.push('/me/mine_order')
+      if (this.user_info.login_status == 0) {
+        this.toLogin()
+      } else if (this.user_info.login_status == 1) {
+        this.$router.push('/me/mine_order')
+      }
     },
     toWaitPay () {
-      this.$router.push('/me/mine_order?index=' + 1)
+      if (this.user_info.login_status == 0) {
+        this.toLogin()
+      } else if (this.user_info.login_status == 1) {
+        this.$router.push('/me/mine_order?index=' + 1)
+      }
     },
     toWaitRececipt () {
-      this.$router.push('/me/mine_order?index=' + 2)
+      if (this.user_info.login_status == 0) {
+        this.toLogin()
+      } else if (this.user_info.login_status == 1) {
+        this.$router.push('/me/mine_order?index=' + 2)
+      }
     },
     toWaitEvaluation () {
-      this.$router.push('/me/mine_order?index=' + 3)
+      if (this.user_info.login_status == 0) {
+        this.toLogin()
+      } else if (this.user_info.login_status == 1) {
+        this.$router.push('/me/mine_order?index=' + 3)
+      }
+    },
+    toSetting () {
+      if (this.user_info.login_status == 0) {
+        this.toLogin()
+      } else if (this.user_info.login_status == 1) {
+        this.$router.push('/me/setting')
+      }
     }
   }
 }
@@ -225,7 +272,8 @@ export default {
   position: absolute;
   left: 15px;
   bottom: 15px;
-  width: 140px;
+  /* width: 100%;
+  box-sizing: border-box; */
   height: 50px;
   box-sizing: border-box;
 }

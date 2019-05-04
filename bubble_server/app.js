@@ -26,12 +26,18 @@ app.use(session({
   saveUninitialized: true // 无论是否使用 session，这里都分配一把钥匙出来
 }))
 
-// app.all('*', function (req, res, next) {
-//   res.header('Access-Control-Allow-Origin', '*')
-//   res.header('Access-Control-Headers', 'X-Requested-With,Content-Type')
-//   res.header('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS')
-//   nect()
-// })
+// 解决跨域问题
+app.all('*', function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
+  //Access-Control-Allow-Headers ,可根据浏览器的F12查看,把对应的粘贴在这里就行
+  // res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header('Access-Control-Allow-Headers', 'Cache-Control');
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Methods', '*');
+  // res.header('Content-Type', 'application/json;charset=utf-8');
+  res.header('Content-Type','application/x-www-form-urlencoded')
+  next();
+});
 
 // 挂载路由
 app.use(router)

@@ -2,13 +2,14 @@
   <div class="shopcart">
     <div class="headTitle">购物车</div>
     <div class="content" ref="content">
-      <div class="toLogin">
+      <div class="toLogin" v-if="login_status == 0">
         <div class="toLoginTips">登录后享受更多优惠</div>
         <div class="toLoginText">
           <div><span>去登录</span><img src="@/assets/svg/gengduo.svg" style="display: inline-block;width: 12px;margin: 0 0 0 5px"></div>
         </div>
       </div>
-    <div class="listContent"  ref="listContentWrapper">
+      <!-- 这里用 v-if 会报错，用 v-show 则不会 -->
+    <div v-show="login_status == 1" class="listContent"  ref="listContentWrapper">
         <div class="goodsList">
           <div class="goodsListItem">
             <div class="goodsListItemStatus">
@@ -35,7 +36,7 @@
         </div>
       </div>
     </div>
-    <div class="footer">
+    <div class="footer" v-if="login_status == 1">
       <div class="settlement">
         <div class="settlement_left">
           <div class="settlementSelect">
@@ -64,11 +65,15 @@ export default {
     return {
       touchIndex: 0,
       startIndex: 0,
-      tranX: 0
+      tranX: 0,
+      login_status: 0,
     }
   },
   mounted () {
-    initScroll(this.scroll, this.$refs.listContentWrapper)
+    this.login_status = localStorage.login_status
+    if (this.login_status == 1) {
+      initScroll(this.scroll, this.$refs.listContentWrapper)
+    }
   }
 }
 </script>
