@@ -6,6 +6,7 @@ let get_user_info = require('./routes/user_info/index')
 let logout = require('./routes/logout')
 let get_shops_info = require('./routes/shops/getShopsInfo')
 let get_shops_picture = require('./routes/shops/getPicture')
+let get_shopcart_info = require('./routes/shopcart/getShopcartInfo')
 
 let router = express()
 
@@ -16,5 +17,6 @@ router.use(get_user_info)
 router.use(logout)
 router.use(get_shops_info)
 router.use(get_shops_picture)
+router.use(get_shopcart_info)
 
 module.exports = router

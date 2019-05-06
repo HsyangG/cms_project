@@ -114,6 +114,11 @@ export default new Router({
       component: () => import('@/components/views/television/list')
     },
     {
+      path: '/views/computer/index',
+      name: 'computer_list',
+      component: () => import('@/components/views/computer/index')
+    },
+    {
       name: 'lifeList',
       path: '/views/life/life',
       component: () => import('@/components/views/life/life')

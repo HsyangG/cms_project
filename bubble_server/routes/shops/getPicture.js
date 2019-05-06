@@ -4,7 +4,7 @@ let query = require('./../../model/db')
 
 let sql = {
   getByPhone: 'SELECT * FROM `user` WHERE `phone` = ? and `status` = ?',
-  queryAllPicture: 'SELECT * FROM `shop_picture`',
+  queryShopPicture: 'SELECT * FROM `shop_picture` WHERE `shop_id` = ?',
   queryAllCarousel: 'SELECT * FROM `carousel`',
   queryFromType: 'SELECT * FROM `shops` WHERE `type` = ?',
 }
@@ -26,6 +26,26 @@ picture.get('/api/get_carousel', async (req, res) => {
     res.json({
       code: 1,
       msg: '暂无商品信息',
+      data: []
+    })
+  }
+})
+
+picture.get('/api/get_shop_picture', async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  let body = req.query
+  const picture_list = await query(sql.queryShopPicture, [body.id])
+  if (picture_list.length != 0) {
+    res.json({
+      code: 0,
+      msg: '操作成功',
+      data: picture_list
+    })
+  }
+  if (picture_list == 0) {
+    res.json({
+      code: 1,
+      msg: '暂无该商品的图片信息',
       data: []
     })
   }

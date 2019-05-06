@@ -11,27 +11,32 @@
       <!-- 这里用 v-if 会报错，用 v-show 则不会 -->
     <div v-show="login_status == 1" class="listContent"  ref="listContentWrapper">
         <div class="goodsList">
-          <div class="goodsListItem">
-            <div class="goodsListItemStatus">
-              <div class="selected"></div>
+          <div class="goodsListItem" v-for="item in selected" :key="item.id">
+            <div class="goodsListItemStatus" @click="selectOne(item)">
+              <svg-icon v-if="item.selected == 1" icon-class="selected" style="width: 18px;height: 18px;background: #ff6a20;border-radius: 50%;"></svg-icon>
+              <div v-else class="selected"></div>
+              <!-- <input type="checkbox" class="checkedbox" :value="item.id"> -->
             </div>
             <div class="goodsListItemInfo">
               <div class="goodsListItemImage">
-                <img src="" alt="">
+                <img v-if="item.picture" :src="item.picture" alt="" style="width: 100%;height: 100%;">
               </div>
               <div class="goodsListItemInfoComtent">
-                <div class="goodsListItemInfoTitle">小米8 屏幕指纹版 8GB内存</div>
-                <div class="goodsListItemInfoDescription">透明 128GB</div>
-                <div class="goodsListItemInfoPrice"><span class="newPrice">&yen;2899</span> <span class="oldPrice">&yen;3399</span></div>
+                <div class="goodsListItemInfoTitle">{{item.name}}</div>
+                <div class="goodsListItemInfoDescription">{{item.format}}</div>
+                <div class="goodsListItemInfoPrice"><span class="newPrice">&yen;{{item.price}}</span> <span class="oldPrice" v-if="item.price != item.old_price">&yen;{{item.old_price}}</span></div>
               </div>
             </div>
-            <div class="goodsListItemCount">
-              <div style="border-right: 1px solid #ccc;">
+            <!-- <div class="goodsListItemCount">
+              <div style="border-right: 1px solid #ccc;" @click="onLess(item.shop_count, item.price, item.total_price)">
                 <svg-icon icon-class="jian" />
               </div>
-              <div style="font-size: 14px;">1</div>
-              <div style="border-left: 1px solid #ccc;"><svg-icon icon-class="tianjia" /></div>
-            </div>
+              <div style="font-size: 14px;">{{item.shop_count + count}}</div>
+              <div style="border-left: 1px solid #ccc;" @click="onAdd(item.shop_count, item.price, item.total_price)">
+                <svg-icon icon-class="tianjia" />
+              </div>
+            </div> -->
+            <v-cartcontrol :good="item"></v-cartcontrol>
           </div>
         </div>
       </div>
@@ -39,13 +44,14 @@
     <div class="footer" v-if="login_status == 1">
       <div class="settlement">
         <div class="settlement_left">
-          <div class="settlementSelect">
-            <div class="selected"></div>
+          <div class="settlementSelect" @click="handleSelectAll">
+            <div v-if="!selectedAll" class="selected"></div>
+            <svg-icon v-if="selectedAll" icon-class="selected" style="width: 18px;height: 18px;background: #ff6a20;border-radius: 50%;"></svg-icon>
             <p style="font-size: 14px;margin-left: 5px;">全选</p>
           </div>
           <div class="settlementCount">
             <div class="settlementCountText">合计:</div>
-            <div class="settlementCountPrice">&yen; 0.00</div>
+            <div class="settlementCountPrice">&yen; {{total_price}}</div>
           </div>
         </div>
         <div class="settlement_right">
@@ -59,20 +65,133 @@
 
 <script type="text/ecmascript-6">
 import { initScroll } from '../../utils'
+import Cartchntrol from './../cartcontrol/index'
 
 export default {
+  components: {
+    'v-cartcontrol': Cartchntrol
+  },
   data () {
     return {
       touchIndex: 0,
       startIndex: 0,
       tranX: 0,
       login_status: 0,
+      shopList: null,
+      count: 0,
+      shop_count: 0,
+      less_item: 0,
+      add_item: 0,
+      // total_price: 0,
+      selectFood: [],
+      selectedAll: false,
+      currentIndex: 0,
+      form: {
+        phone: '',
+        shop_id: '',
+        shop_count: 0,
+        total_price: 0.00,
+        selected: ''
+      }
+    }
+  },
+  computed: {
+    total_price: {
+      get: function () {
+        let total = 0
+        if (this.shopList) {
+          for (let i = 0; i < this.shopList.length; i++) {
+            total = total + this.shopList[i].total_price
+          }
+        }
+        return total
+      },
+      set: function () {}
+    },
+    selected: {
+      get: function (row) {
+        let list = this.shopList
+        if (list) {
+          for (let i = 0; i < list.length; i++) {
+            if (list[i].id == row.id) {
+              if (list[i].selected == 1) {
+                list[i].selected == 0
+              } else {
+                list[i].selected == 1
+              }
+            }
+          }
+        }
+        return list
+      },
+      set: function () {}
     }
   },
   mounted () {
     this.login_status = localStorage.login_status
     if (this.login_status == 1) {
       initScroll(this.scroll, this.$refs.listContentWrapper)
+      this.getShopList()
+    }
+    // console.log(good)
+    this.$root.eventHub.$on('addShop', this.onAdd)
+    this.$root.eventHub.$on('lessShop', this.onLess)
+  },
+  methods: {
+    getShopList () {
+      this.$axios.get('/api/get_shopcart_shop')
+      .then((response) => {
+        if (response.data.code == 0) {
+          this.shopList = response.data.data
+          this.selected = response.data.data
+          for (let i = 0; i < this.shopList.length; i++) {
+            this.total_price = this.total_price + this.shopList[i].total_price
+          }
+        }
+      }).catch((err) => {
+        console.log(err)
+      });
+    },
+    onLess (data) {
+      // 当修改购物车数据的时候同时修改shopList的内容以保持同步
+      console.log(data)
+      this.less_item = data
+      // this.total_price = this.less_item.total_price
+      for (let i = 0; i < this.shopList.length; i++) {
+        if (this.less_item.id == this.shopList[i].id) {
+          this.shopList[i].total_price = this.less_item.total_price
+          this.shopList[i].count = this.less_item.count
+        }
+      }
+      console.log(this.shopList)
+    },
+    onAdd (data) {
+      console.log(data)
+      this.add_item = data
+      // this.total_price = this.add_item.total_price
+      for (let i = 0; i < this.shopList.length; i++) {
+        if (this.add_item.id == this.shopList[i].id) {
+          this.shopList[i].total_price = this.add_item.total_price
+          this.shopList[i].count = this.add_item.count
+        }
+      }
+      console.log(this.shopList)
+    },
+    selectOne (row) {
+      console.log(row)
+      this.currentIndex = row.id
+      // this.selectedOne = true
+      for (let i = 0; i < this.selected.length; i++) {
+        let item = this.selected[i]
+        if (!item.selected || item.selected == '' || item.selected == 0) {
+          this.selected[i].selected == 1
+        } else if (item.selected == 1) {
+          this.selected[i].selected == 0
+        }
+      }
+    },
+    handleSelectAll () {
+      this.selectedAll = !this.selectedAll
     }
   }
 }
@@ -186,6 +305,9 @@ export default {
   box-sizing: border-box;
   padding: 5px 10px;
 }
+.goodsListItemInfoTitle{
+  font-size: 14px;
+}
 .goodsListItemInfoDescription{
   font-size: 12px;
   margin-top: 3px;
@@ -278,5 +400,13 @@ export default {
   border-radius: 50%;
   box-sizing: border-box;
 }
-  .list{}
+.checkedbox{
+  width: 18px;
+  height: 18px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  border-radius: 50%;
+  -webkit-appearance: none;
+  outline: none;
+}
 </style>

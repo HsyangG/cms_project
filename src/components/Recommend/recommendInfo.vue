@@ -2,7 +2,7 @@
   <div class="recommendInfo" ref="recommendInfoWrapper">
     <div class="listContent">
       <div class="carouselMap">
-        <v-carousel></v-carousel>
+        <v-carousel v-if="carouselList" :carouselList="carouselList" :height="400"></v-carousel>
         <div class="go_back" @click.prevent="goBack">
           <svg-icon icon-class="go_back_white"></svg-icon>
         </div>
@@ -10,24 +10,23 @@
           <svg-icon icon-class="icon_more"></svg-icon>
         </div>
       </div>
-      <div class="header">
-        <div class="title">小米8 屏幕指纹版</div>
+      <div class="header" v-if="shop_info">
+        <div class="title">{{shop_info.name}}</div>
         <div class="description">
-          <span class="underline" style="color: #ff6a20">8GB+128GB 立省200 , 到手价仅2699</span><span> 全球首款压感屏幕指纹 , 快速解锁/骁龙845处理器 ,
-            全面提升游戏性能表现/四曲面渐变镜面机身 , 轻薄圆润/960帧超慢动作/手持超级夜景
+          <span class="underline" style="color: #ff6a20">{{shop_info.format}} {{shop_info.specification}}</span><span> {{shop_info.description}}
           </span>
         </div>
         <div class="price">
-          <span class="new_price">&yen;2699</span><span class="old_price">&yen;3399</span><span class="discount">直降700元</span>
+          <span class="new_price">&yen;{{shop_info.price}}</span><span class="old_price" v-show="shop_info.price != shop_info.old_price">&yen;{{shop_info.old_price}}</span><span v-if="shop_info.tag" class="discount">{{shop_info.tag}}</span>
         </div>
       </div>
       <div class="div_split"></div>
-      <div class="size_and_address">
+      <div class="size_and_address" v-if="shop_info">
         <ul>
           <li class="good_size" @click.prevent="showSizeList">
             <div class="good_size_item">
               <div class="good_selected">已选</div>
-              <div class="good_name">小米8 屏幕指纹版 8GB+128GB 透明<span style="font-size: 12px">x</span>1</div>
+              <div class="good_name">{{shop_info.name}} {{shop_info.format}} <span style="font-size: 12px">x</span>1</div>
               <div class="go_ahead"><svg-icon icon-class="qianjin"></svg-icon></div>
             </div>
           </li>
@@ -84,27 +83,53 @@
           <div><svg-icon icon-class="favorite_default"></svg-icon></div>
           <div style="font-size: 12px">喜欢</div>
         </div>
-        <div class="shopcart">
+        <div class="shopcart" @click="toShopCart">
           <div><svg-icon icon-class="icon_shopcart"></svg-icon></div>
           <div style="font-size: 12px">购物车</div>
         </div>
         <div class="add_to_shopcart">
-          <button>加入购物车</button>
+          <button :class="{'unused': login_status == 0}" @click="addShop">加入购物车</button>
         </div>
       </div>
+      <div class="shop_count" v-if="count > 0">{{count}}</div>
+    </div>
+    <div class="tips_container">
+      <div class="login_tips" v-if="showTips">{{addTips}}</div>
     </div>
   </div>
 </template>
 <script>
 import { initScroll } from '@/utils/index'
 import ShowSize from '@/components/Recommend/showSize'
+import { setTimeout, clearInterval } from 'timers'
+import qs from 'qs'
 export default {
   components: {
     'v-show-size': ShowSize
   },
   data () {
     return {
-      showSizeFlag: true
+      showSizeFlag: true,
+      listQuery: {
+        shop_id: '',
+        phone: ''
+      },
+      shop_info: null,
+      carouselList: null,
+      shop_picture: null,
+      login_status: '',
+      showTips: false,
+      timer: null,
+      count: 0,
+      shop_count: 0, // 数据回显
+      addTips: '您还未登录',
+      shopcart_info: null,
+      form: {
+        phone: '',
+        shop_id: '',
+        shop_count: '',
+        total_price: ''
+      }
     }
   },
   // watch: {
@@ -112,15 +137,128 @@ export default {
   //     console.log(newVal)
   //   }
   // },
+  created () {
+    this.listQuery.shop_id = this.$route.query.id || ''
+    this.login_status = localStorage.login_status
+    this.listQuery.phone = localStorage.phone
+    this.getShopInfo()
+    this.getShopPicture()
+    this.getShopcartInfo()
+    // console.log(localStorage)
+  },
   mounted () {
     initScroll(this.scroll, this.$refs.recommendInfoWrapper)
   },
   methods: {
+    getShopInfo () {
+      this.$axios.get('/api/get_shops_info', {
+        params: {
+          id: this.listQuery.shop_id
+        }
+      })
+      .then((response) => {
+        if (response.data.code == 0) {
+          this.shop_info = response.data.data[0]
+          // console.log(this.shop_info)
+        } else {
+          console.log(response.data.msg)
+        }
+      }).catch((err) => {
+        console.log(err)
+      });
+    },
+    getShopPicture () {
+      this.$axios.get('/api/get_shop_picture', {
+        params: {
+          id: this.listQuery.shop_id
+        }
+      })
+      .then((response) => {
+        if (response.data.code == 0) {
+          this.carouselList = response.data.data
+        } else {
+          console.log(response.data.msg)
+        }
+      }).catch((err) => {
+        console.log(err)
+      });
+    },
+    getShopcartInfo () {
+      this.$axios.get('/api/get_shopcart_shop', {
+        params: this.listQuery
+      })
+      .then((response) => {
+        if (response.data.code == 0) {
+          this.shopcart_info = response.data.data[0]
+          this.count = this.shopcart_info.shop_count
+        }
+      }).catch((err) => {
+        console.log(err)
+      });
+    },
+    resetForm () {
+      this.form = {
+        phone: '',
+        shop_id: '',
+        shop_count: '',
+        total_price: ''
+      }
+    },
     goBack () {
       this.$router.push('/home')
     },
     showSizeList () {
       this.showSizeFlag = true
+    },
+    toShopCart () {
+      this.resetForm()
+      if (!this.shopcart_info) {
+        this.form.phone = localStorage.phone
+      } else {
+        this.form.phone = this.shopcart_info.phone
+      }
+      this.form.shop_id = this.listQuery.shop_id
+      this.form.shop_count = this.count
+      this.form.total_price = this.count * this.shop_info.price
+      if (localStorage.login_status == 1) {
+        if (this.count == 0) {
+          this.$router.push('/shopcart')
+          return true
+        }
+        this.$axios.post('/api/update_shopcart', qs.stringify(this.form))
+        .then((response) => {
+          if (response.data.code == 0) {
+            this.$router.push('/shopcart')
+          } else {
+            console.log(response.data.msg)
+          }
+        }).catch((err) => {
+          console.log(err)
+        })
+      } else {
+        this.$router.push('/callme/logp')
+      }
+    },
+    addShop () {
+      if (this.login_status == 0) {
+        this.addTips = '您还未登录'
+        this.showTips = true
+        this.timer = setTimeout(() => {
+          this.showTips = false
+          clearInterval(this.timer)
+        }, 1000)
+      } else {
+        if (this.count >= 5) {
+          this.addTips = '已经达到最大数量了哦'
+          this.showTips = true
+          this.timer = setTimeout(() => {
+            this.showTips = false
+            clearInterval(this.timer)
+          }, 1000)
+          return false
+        }
+        this.count ++
+      }
     }
   }
 }
@@ -357,5 +495,39 @@ export default {
   line-height: 54px;
   font-size: 16px;
   text-align: right;
+}
+.shop_count{
+  position: absolute;
+  top: 2px;
+  left: 110px;
+  padding: 2px 5px;
+  background: #ff6a20;
+  font-size: 10px;
+  border-radius: 50%;
+  color: #fff;
+}
+.unused{
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: none;
+  background: #ccc !important;
+  color: #fff;
+}
+.tips_container{
+  position: absolute;
+  top: 300px;
+  left: 0;
+  width: 100%;
+  /* background: #eee; */
+}
+.login_tips{
+  display: inline-block;
+  padding: 10px;
+  border-radius: 5px;
+  background: rgba(0,0,0,0.5);
+  color: rgba(255,255,255,0.9);
 }
 </style>

@@ -18,7 +18,7 @@ export default {
         {className: 'cms-phone', title: '手机', router: {name: 'phoneList'}},
         {className: 'cms-intelligence', title: '智能', router: {name: 'intelligenceList'}},
         {className: 'cms-television', title: '电视', router: {name: 'televisionList'}},
-        {className: 'cms-laptop', title: '笔记本', router: {name: 'televisionList'}},
+        {className: 'cms-laptop', title: '笔记本', router: {name: 'computer_list'}},
         {className: 'cms-life', title: '生活周边', router: {name: 'lifeList'}}
         // {className: 'cms-callMe', title: '联系我们', router: {name: 'login'}}
       ],

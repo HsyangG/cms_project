@@ -53,13 +53,13 @@
                 <button class="success" style="width: 50%;margin-top: 2px;">立即预约</button>
               </div>
             </li> -->
-            <li>
-              <div class="dailySelectContentListLeft"  style="width: 100%;height: 100%;background: #fff;">
-                <img src="http://localhost:3000/public/img/commodities/redminode7.png" alt="" style="width: 100%;height: 200px;">
-                <p class="dailyTitle">小米8</p>
-                <p class="dailyDescription">相机全新升级，骁龙845</p>
+            <li v-for="item in shopList" :key="item.id" v-if="item.type == 'television'">
+              <div class="dailySelectContentListLeft"  style="width: 100%;height: 100%;">
+                <img v-if="item.picture" :src="item.picture" alt="" style="width: 100%;height: 200px;">
+                <p class="dailyTitle">{{item.name}}</p>
+                <p class="dailyDescription">{{item.brief}}</p>
                 <div class="dailyPrice">
-                  <span class="dailyPriceNew">&yen;2299&nbsp;起 </span><span class="dailyPriceOld"> &yen;2699</span>
+                  <span class="dailyPriceNew">&yen;{{item.price}}&nbsp;起 </span><span class="dailyPriceOld"> &yen;{{item.old_price}}</span>
                 </div>
                 <button class="success" style="width: 50%;margin-top: 2px;">立即预约</button>
               </div>
@@ -172,17 +172,25 @@ export default {
 .dailySelectionContentList ul li{
   /* display: flex; */
   display: inline-block;
-  width: 100%;
-  height: 305px;
-  box-sizing: border-box;
-  margin-bottom: 15px;
+  width: 49.4%;
+  /* height: 305px; */
+  /* box-sizing: border-box; */
+  padding-bottom: 15px;
   text-align: center;
+  background: #fff;
 }
 .dailyTitle{
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
   color: black;
   margin-top: 15px;
   font-weight: 700;
   font-size: 14px;
+  padding: 0 10px;
+  box-sizing: border-box;
+
 }
 .dailyDescription{
   font-size: 10px;

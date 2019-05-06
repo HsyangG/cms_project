@@ -14,7 +14,7 @@
         </div>
         <div class="shopList">
           <div class="content">
-            <div class="contentLeft" @click.prevent="toRecommendInfo">
+            <div class="contentLeft" @click.prevent="toRecommendInfo(hot_shops[0].id)">
               <img v-if="hot_shops" :src="hot_shops[0].picture" alt="" style="width: 100%;height: 100%">
             </div>
             <div class="splitDiv"></div>
@@ -74,7 +74,7 @@
                     </div>
                   </div>
                 </li> -->
-                <li v-for="item in shopList" :key="item.id" v-if="item.type == 'phone'">
+                <li v-for="item in shopList" :key="item.id" v-if="item.type == 'phone'" @click="toRecommendInfo(item.id)">
                   <div class="dailySelectContentListLeft"  style="width: 100%;height: 100%;">
                     <img v-if="item.picture" :src="item.picture" alt="" style="width: 100%;height: 270px;">
                     <p class="dailyTitle">{{item.name}}</p>
@@ -181,8 +181,8 @@ export default {
         console.log(err)
       });
     },
-    toRecommendInfo () {
-      this.$router.push('/recommend/recommend_info?id=' + 25)
+    toRecommendInfo (val) {
+      this.$router.push('/recommend/recommend_info?id=' + val)
     }
   }
 }

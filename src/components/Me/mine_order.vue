@@ -60,7 +60,6 @@ export default {
        * 所以直接在 watch 里面调用事件发射，原函数的被移除
        * 就能解决问题了
        */
-      // console.log(newVal)
       this.tabClick(newVal)
       this.$root.eventHub.$emit('orderTabChange', this.currentIndex)
     }

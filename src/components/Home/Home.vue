@@ -107,7 +107,7 @@ export default {
         {router: {name: 'phoneList'}, component: () => import('@/components/views/phone/phone')},
         {router: {name: 'intelligenceList'}, component: () => import('@/components/views/intelligence/intelligence')},
         {router: {name: 'televisionList'}, component: () => import('@/components/views/television/television')},
-        {router: {name: 'televisionList'}, component: () => import('@/components/views/television/television')},
+        {router: {name: 'computer_list'}, component: () => import('@/components/views/computer/index')},
         {router: {name: 'lifeList'}, component: () => import('@/components/views/life/life')}
         // {router: {name: 'news.list'}, component: NewsList},
         // {router: {name: 'logp'}, component: Logp}
