@@ -28,7 +28,7 @@
           </li>
           <li class="comment" @click.prevent="toWaitEvaluation">
             <span class="icon-daipingjia"></span>
-            <span style="font-size: 12px;margin-top: 5px;">待评价</span>
+            <span style="font-size: 12px;margin-top: 5px;">已完成</span>
           </li>
           <li class="afterSale">
             <span class="icon-weixiu"></span>

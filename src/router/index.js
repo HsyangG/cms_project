@@ -68,6 +68,18 @@ export default new Router({
       meta: { title: '设置' }
     },
     {
+      path: '/me/mine_address',
+      name: 'mine_address',
+      component: () => import('@/components/Me/mine_address'),
+      meta: { title: '我的地址' }
+    },
+    {
+      path: '/me/mine_address_add',
+      name: 'add_address',
+      component: () => import('@/components/Me/mine_address_add'),
+      meta: { title: '添加地址' }
+    },
+    {
       path: '/member',
       name: 'member',
       component: Member

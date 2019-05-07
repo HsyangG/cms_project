@@ -8,12 +8,12 @@
           </div>
           <div class="title">我的订单</div>
           <div class="header_left"></div>
-          <div class="header_right">
+          <!-- <div class="header_right">
             <div class="find">
               <svg-icon icon-class="find"></svg-icon>
             </div>
             <div class="shopcart"><i class="icon-gouwuche"></i></div>
-          </div>
+          </div> -->
         </div>
         <div class="menu">
           <ul>
@@ -38,7 +38,7 @@ export default {
   },
   data () {
     return {
-      menu_list: ['全部', '待付款', '待收货', '待评价'],
+      menu_list: ['全部', '待付款', '待收货', '已完成'],
       currentIndex: 0,
       routersList: [
         {path: '/me/orders/all', name: 'all', component: () => import('@/components/views/orders/all')},

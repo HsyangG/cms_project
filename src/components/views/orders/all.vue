@@ -7,22 +7,27 @@
             <div class="goods_list_item">
               <div class="item_header">
                 <div class="item_header_time">{{ item.created_at }}</div>
-                <div class="item_header_status">{{ item.status }}</div>
+                <div class="item_header_status">
+                  <span v-if="item.status == 'wait_deliver'">待付款</span>
+                  <span v-else-if="item.status == 'wait_receipt'">待收货</span>
+                  <span v-else-if="item.status == 'complete'">已完成</span>
+                </div>
               </div>
               <div class="item_content">
                 <ul>
                   <li class="order_list" v-for="elem in item.shop_list" :key="elem.index">
                     <div class="order_list_item">
                       <div class="order_list_item_image">
-                        <img :src="elem.image" alt="">
+                        <img v-if="elem.picture" :src="elem.picture" alt="">
                       </div>
                       <div class="order_list_item_title">
                         <p style="font-size: 14px;font-weight: 700;">{{ elem.name }}</p>
-                        <p style="font-size: 12px;color: #a1a1a1;margin-top: 5px;">{{ elem.color }}</p>
+                        <p style="font-size: 12px;color: #a1a1a1;margin-top: 5px;">{{ elem.format }}</p>
                       </div>
                       <div class="order_list_item_price">
                         <p>&yen;{{ elem.price }}</p>
-                        <p style="margin-top: 5px;"><span style="font-size: 10px;color: #a1a1a1;">x</span>{{ elem.count }}</p>
+                        <!-- <p style="margin-top: 5px;"><span style="font-size: 10px;color: #a1a1a1;">x</span>{{ elem.count }}</p> -->
+                        <p style="margin-top: 5px;"><span style="font-size: 10px;color: #a1a1a1;">x</span>1</p>
                       </div>
                     </div>
                   </li>
@@ -30,7 +35,7 @@
               </div>
               <div class="item_footer">
                 <div class="item_footer_info">
-                  <span>共{{ item.total }}件商品 合计:</span><span style="font-size: 16px;color: #9c9c9c">&nbsp;&nbsp;&yen;152.90</span>
+                  <span>共{{ item.total }}件商品 合计:</span><span style="font-size: 16px;color: #9c9c9c">&nbsp;&nbsp;&yen;{{ item.total_price }}</span>
                 </div>
                 <div class="item_footer_button">
                   <button>查看物流</button><button style="border: 1px solid #ff6a20;color: #ff6a20;">评价晒单</button>
@@ -181,13 +186,36 @@ export default {
           total: 2,
           total_price: 152.90
         }
-      ]
+      ],
+      listQuery: {
+        phone: ''
+      }
     }
+  },
+  created () {
+    this.listQuery.phone = localStorage.phone
   },
   mounted () {
     this.$nextTick(() => {
       initScroll(this.scroll, this.$refs.allWrapper)
-    })
+    }),
+    this.getOrderList()
+  },
+  methods: {
+    getOrderList () {
+      this.$axios.get('/api/get_orders', {
+        params: this.listQuery
+      })
+      .then((response) => {
+        if (response.data.code == 0) {
+          this.list = response.data.data
+        } else {
+          console.log(response.data.msg)
+        }
+      }).catch((err) => {
+        console.log(err)
+      });
+    }
   }
 }
 </script>

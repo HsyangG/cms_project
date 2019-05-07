@@ -185,8 +185,10 @@ export default {
         let item = this.selected[i]
         if (!item.selected || item.selected == '' || item.selected == 0) {
           this.selected[i].selected == 1
+          console.log('1')
         } else if (item.selected == 1) {
           this.selected[i].selected == 0
+          console.log('0')
         }
       }
     },

@@ -1,5 +1,5 @@
 <template>
-  <div class="user_info">
+  <div class="mine_address">
     <div class="container">
       <div class="header">
         <div class="go_back" @click.prevent="goBack">
@@ -17,41 +17,68 @@
       <div class="info_list">
         <ul>
           <li>
-            <div class="list_title">账号管理</div>
-            <div class="list_content" @click="toUserInfo">
-              <div class="list_left">
-                <span>个人资料</span>
-              </div>
-              <div class="list_right">
-                <svg-icon icon-class="qianjin"></svg-icon>
-              </div>
-            </div>
-          </li>
-          <li>
-            <div class="list_content" @click="toMineAddress">
-              <div class="list_left">
-                <span>收货地址</span>
-              </div>
-              <div class="list_right">
-                <svg-icon icon-class="qianjin"></svg-icon>
-              </div>
-            </div>
-          </li>
-          <li style="width: 100%;height: 15px;"></li>
-          <li>
-            <div class="list_title">关于</div>
+            <div class="list_title">地址管理</div>
             <div class="list_content">
               <div class="list_left">
-                <span>关于商城</span>
+                <span>地址类型</span>
               </div>
               <div class="list_right">
-                <!-- <span style="margin-right: 5px;">username</span> -->
-                <svg-icon icon-class="qianjin"></svg-icon>
+                <!-- <svg-icon icon-class="qianjin"></svg-icon> -->
+                <select class="com-opt" v-model="form.type">
+                  <!-- 默认提示信息 -->
+                  <option value="" disabled selected hidden>请选择地址类型</option>
+                  <option value="home" selected="selected">家庭地址</option>
+                  <option value="company">工作地址</option>
+                  <option value="moren">默认地址</option>
+                </select>
               </div>
+            </div>
+          </li>
+          <li>
+            <div class="list_content">
+              <div class="list_left">
+                <span>我的姓名</span>
+              </div>
+              <div class="list_right">
+                <!-- <svg-icon icon-class="qianjin"></svg-icon> -->
+                <input class="my_input" placeholder="请输入姓名" v-model="form.name" type="text">
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="list_content">
+              <div class="list_left">
+                <span>我的手机</span>
+              </div>
+              <div class="list_right">
+                <!-- <svg-icon icon-class="qianjin"></svg-icon> -->
+                <input class="my_input" placeholder="请输入手机号" v-model="form.phone" type="text">
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="list_content">
+              <div class="list_left">
+                <span>省市区</span>
+              </div>
+              <div class="list_right">
+                <!-- <svg-icon icon-class="qianjin"></svg-icon> -->
+                <input class="my_input" placeholder="省" v-model="form.province" type="text" style="width: 33%;">
+                <input class="my_input" placeholder="市" v-model="form.city" type="text" style="width: 33%;">
+                <input class="my_input" placeholder="区" v-model="form.district" type="text" style="width: 33%;">
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="list_content">
+              <div class="list_left">
+                <span>详细地址</span>
+              </div>
+              <input class="my_input" placeholder="请输入详细地址" v-model="form.site" type="textarea">
             </div>
           </li>
         </ul>
-        <div class="logout" @click="toLogout">退出登录</div>
+        <div class="logout" @click="handleSubmit">提交</div>
         <div class="logout_dialog" v-if="showDialog" ref="logout_dialog">
           <div class="dialog_box" ref="dialog_box">
             <div class="dialog_title">退出账号</div>
@@ -63,6 +90,9 @@
               </div>
             </div>
           </div>
+        </div>
+        <div class="tips_container">
+          <div class="login_tips" v-if="showTips">{{addTips}}</div>
         </div>
       </div>
     </div>
@@ -77,15 +107,31 @@ export default {
     return {
       title: '',
       listQuery: {
+        id: '',
         phone: '',
         status: '',
         timer: null
       },
       showDialog: false,
-      is_disable: false
+      is_disable: false,
+      form: {
+        name: '',
+        phone: '',
+        province: '',
+        city: '',
+        district: '',
+        site: '',
+        type: '',
+      },
+      showTips: false,
+      addTips: '您还未登录',
     }
   },
   created () {
+    this.listQuery.id = this.$route.query.id || ''
+    if (this.listQuery.id) {
+      this.getAddress()
+    }
     this.title = this.$route.meta.title
     // console.log(this.title)
     this.listQuery.phone = localStorage.phone
@@ -93,19 +139,52 @@ export default {
     // console.log(localStorage)
   },
   methods: {
-    // resetUserStatus () {
-    //   localStorage.removeItem(phone)
-    //   localStorage.removeItem(login_status)
-    //   localStorage.removeItem(username)
-    // },
+    getAddress () {
+      this.$axios.get('/api/get_address_by_id', {
+        params: {
+          id: this.listQuery.id
+        }
+      })
+      .then((response) => {
+        if (response.data.code == 0) {
+          this.form = response.data.data[0]
+        } else {
+          console.log(response.data.msg)
+        }
+      }).catch((err) => {
+        console.log(err)
+      });
+    },
     goBack () {
-      this.$router.push('/me')
+      this.$router.push('/me/mine_address')
     },
     toUserInfo () {
       this.$router.push('/me/user_information')
     },
     toMineAddress () {
       this.$router.push('/me/mine_address')
+    },
+    handleSubmit () {
+      // console.log(this.form)
+      this.$axios.post('/api/update_address', qs.stringify(this.form))
+      .then((response) => {
+        if (response.data.code == 0) {
+          this.getAddress()
+            this.showDialog = false
+            this.addTips = '操作成功'
+            this.showTips = true
+            this.timer = setTimeout(() => {
+              this.showTips = false
+              clearInterval(this.timer)
+            }, 1000)
+            this.$router.push('/me/mine_address')
+            return false
+        } else {
+          console.log(response.data.msg)
+        }
+      }).catch((err) => {
+
+      });
     },
     toLogout () {
       // this.$axios.post('/api/logout', qs.stringify(this.listQuery))
@@ -209,7 +288,7 @@ export default {
 .list_content{
   display: flex;
   width: 100%;
-  padding: 10px 15px;
+  padding: 15px;
   box-sizing: border-box;
   background: #fff;
   border-bottom: 1px solid #f5f5f5;
@@ -217,17 +296,19 @@ export default {
 }
 .list_left{
   display: flex;
-  width: 100%;
+  width: 90px;
   align-items: center; /* 上下居中 */
   /* justify-content: center; */ /* 左右居中 */
   font-weight: 500;
+  /* background: #ff6a20; */
 }
 .list_right{
   display: flex;
   width: 100%;
-  align-items: center; /* 上下居中 */
-  justify-content: flex-end;
-  /* text-align: right; */
+  align-items: center; /*上下居中*/
+  justify-content: flex-start;
+  /* text-align: left; */
+  /* background: #ccc; */
 }
 .avatar{
   /* display: inline-block; */
@@ -294,5 +375,48 @@ export default {
   text-align: center;
   color: #ff6a20;
 }
+.my_input{
+  display: inline-block;
+  /* width: 100%; */
+  font-size: 14px;
+  border: none;
+  outline: none;
+}
+.tips_container{
+  position: absolute;
+  top: 300px;
+  left: 0;
+  width: 100%;
+  /* background: #eee; */
+}
+.login_tips{
+  display: inline-block;
+  padding: 10px;
+  border-radius: 5px;
+  background: rgba(0,0,0,0.5);
+  color: rgba(255,255,255,0.9);
+}
+.com-sel {
+    line-height: 5rem;
+    cursor: pointer;        /*鼠标上移变成小手*/
+}
+
+.com-opt {
+    padding-right: 1.8rem;
+    color: #afbac0;
+    font-size: 14px;
+    border: none;
+    outline: none;
+    /*去掉默认的下拉三角*/
+    appearance:none;
+    -moz-appearance:none;
+    -webkit-appearance:none;
+    /*添加下拉三角图标*/
+}
+/* ---------------------
+作者：修炼ing
+来源：CSDN
+原文：https://blog.csdn.net/nishiwodebocai21/article/details/82350679
+版权声明：本文为博主原创文章，转载请附上博文链接！ */
 </style>
 
