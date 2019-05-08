@@ -79,22 +79,22 @@
           </li>
         </ul>
         <div class="logout" @click="handleSubmit">提交</div>
-        <div class="logout_dialog" v-if="showDialog" ref="logout_dialog">
-          <div class="dialog_box" ref="dialog_box">
-            <div class="dialog_title">退出账号</div>
-            <div class="dialog_content">确定要退出账号吗？</div>
-            <div class="dialog_bottom">
-              <div class="dialog_button">
-                <div class="dialog_cancel" @click.prevent="handleCancel">取消</div>
-                <div class="dialog_confirm" @click.prevent="handleConfirm" :disabled="is_disable">确定</div>
-              </div>
-            </div>
+      </div>
+    </div>
+    <div class="logout_dialog" v-if="showDialog" ref="logout_dialog">
+      <div class="dialog_box" ref="dialog_box">
+        <div class="dialog_title">退出账号</div>
+        <div class="dialog_content">确定要退出账号吗？</div>
+        <div class="dialog_bottom">
+          <div class="dialog_button">
+            <div class="dialog_cancel" @click.prevent="handleCancel">取消</div>
+            <div class="dialog_confirm" @click.prevent="handleConfirm" :disabled="is_disable">确定</div>
           </div>
         </div>
-        <div class="tips_container">
-          <div class="login_tips" v-if="showTips">{{addTips}}</div>
-        </div>
       </div>
+    </div>
+    <div class="tips_container">
+      <div class="login_tips" v-if="showTips">{{addTips}}</div>
     </div>
   </div>
 </template>
@@ -108,7 +108,7 @@ export default {
       title: '',
       listQuery: {
         id: '',
-        phone: '',
+        account: '',
         status: '',
         timer: null
       },
@@ -116,6 +116,7 @@ export default {
       is_disable: false,
       form: {
         name: '',
+        account: '',
         phone: '',
         province: '',
         city: '',
@@ -134,7 +135,7 @@ export default {
     }
     this.title = this.$route.meta.title
     // console.log(this.title)
-    this.listQuery.phone = localStorage.phone
+    this.listQuery.account = localStorage.phone
     this.listQuery.status = localStorage.login_status
     // console.log(localStorage)
   },
@@ -166,6 +167,7 @@ export default {
     },
     handleSubmit () {
       // console.log(this.form)
+      this.form.account = localStorage.phone
       this.$axios.post('/api/update_address', qs.stringify(this.form))
       .then((response) => {
         if (response.data.code == 0) {
@@ -238,6 +240,7 @@ export default {
   width: 100%;
   height: 100vh; /* 视窗高度 */
   background: #f5f5f5;
+  position: relative;
 }
 .header{
   display: flex;

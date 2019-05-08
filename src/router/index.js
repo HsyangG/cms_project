@@ -45,6 +45,12 @@ export default new Router({
       component: Shopcart
     },
     {
+      path: '/shopcart/settlement',
+      name: 'settlement',
+      component: () => import('@/components/shopcart/settlement'),
+      meta: { title: '支付订单' }
+    },
+    {
       name: 'me',
       path: '/me',
       component: Me

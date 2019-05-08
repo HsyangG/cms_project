@@ -41,20 +41,23 @@
         </div>
       </div>
     </div>
-    <div class="footer" v-if="login_status == 1">
+    <div class="footer" v-show="login_status == 1">
       <div class="settlement">
         <div class="settlement_left">
-          <div class="settlementSelect" @click="handleSelectAll">
+          <!-- <div class="settlementSelect" @click="handleSelectAll">
             <div v-if="!selectedAll" class="selected"></div>
             <svg-icon v-if="selectedAll" icon-class="selected" style="width: 18px;height: 18px;background: #ff6a20;border-radius: 50%;"></svg-icon>
             <p style="font-size: 14px;margin-left: 5px;">全选</p>
-          </div>
+          </div> -->
           <div class="settlementCount">
             <div class="settlementCountText">合计:</div>
             <div class="settlementCountPrice">&yen; {{total_price}}</div>
           </div>
         </div>
-        <div class="settlement_right">
+        <div class="settlement_right_selected" @click="toSettlement" v-if="shop_count > 0">
+          <span>结算</span><span>({{shop_count}})</span>
+        </div>
+        <div class="settlement_right" v-else>
           <span>结算</span><span>(0)</span>
         </div>
       </div>
@@ -66,6 +69,7 @@
 <script type="text/ecmascript-6">
 import { initScroll } from '../../utils'
 import Cartchntrol from './../cartcontrol/index'
+import qs from 'qs'
 
 export default {
   components: {
@@ -79,7 +83,7 @@ export default {
       login_status: 0,
       shopList: null,
       count: 0,
-      shop_count: 0,
+      // shop_count: 0,
       less_item: 0,
       add_item: 0,
       // total_price: 0,
@@ -92,7 +96,8 @@ export default {
         shop_count: 0,
         total_price: 0.00,
         selected: ''
-      }
+      },
+      selected: ''
     }
   },
   computed: {
@@ -108,24 +113,36 @@ export default {
       },
       set: function () {}
     },
-    selected: {
-      get: function (row) {
-        let list = this.shopList
-        if (list) {
-          for (let i = 0; i < list.length; i++) {
-            if (list[i].id == row.id) {
-              if (list[i].selected == 1) {
-                list[i].selected == 0
-              } else {
-                list[i].selected == 1
-              }
-            }
+    shop_count: {
+      get: function () {
+        let count = 0
+        if (this.shopList) {
+          for (let i = 0; i < this.shopList.length; i++) {
+            count = count + this.shopList[i].shop_count
           }
         }
-        return list
+        return count
       },
       set: function () {}
     }
+    // selected: {
+    //   get: function (row) {
+    //     let list = this.shopList
+    //     if (list) {
+    //       for (let i = 0; i < list.length; i++) {
+    //         if (list[i].id == row.id) {
+    //           if (list[i].selected == 1) {
+    //             list[i].selected == 0
+    //           } else {
+    //             list[i].selected == 1
+    //           }
+    //         }
+    //       }
+    //     }
+    //     return list
+    //   },
+    //   set: function () {}
+    // }
   },
   mounted () {
     this.login_status = localStorage.login_status
@@ -146,11 +163,21 @@ export default {
           this.selected = response.data.data
           for (let i = 0; i < this.shopList.length; i++) {
             this.total_price = this.total_price + this.shopList[i].total_price
+            this.shopList[i].phone = localStorage.phone
           }
         }
       }).catch((err) => {
         console.log(err)
       });
+    },
+    resetForm () {
+      this.form = {
+        phone: '',
+        shop_id: '',
+        shop_count: '',
+        total_price: '',
+        selected: ''
+      }
     },
     onLess (data) {
       // 当修改购物车数据的时候同时修改shopList的内容以保持同步
@@ -160,7 +187,7 @@ export default {
       for (let i = 0; i < this.shopList.length; i++) {
         if (this.less_item.id == this.shopList[i].id) {
           this.shopList[i].total_price = this.less_item.total_price
-          this.shopList[i].count = this.less_item.count
+          this.shopList[i].shop_count = this.less_item.shop_count
         }
       }
       console.log(this.shopList)
@@ -172,7 +199,7 @@ export default {
       for (let i = 0; i < this.shopList.length; i++) {
         if (this.add_item.id == this.shopList[i].id) {
           this.shopList[i].total_price = this.add_item.total_price
-          this.shopList[i].count = this.add_item.count
+          this.shopList[i].shop_count = this.add_item.shop_count
         }
       }
       console.log(this.shopList)
@@ -194,6 +221,22 @@ export default {
     },
     handleSelectAll () {
       this.selectedAll = !this.selectedAll
+    },
+    toSettlement () {
+      this.form = this.shopList
+      // console.log(this.form)
+      for (let i = 0; i < this.form.length; i++) {
+        this.$axios.post('/api/shopcart/update', qs.stringify(this.form[i]))
+        .then((response) => {
+          if (response.data.code == 0) {
+            this.$router.push('/shopcart/settlement?phone=' + localStorage.phone)
+          } else {
+            console.log(response.data.msg)
+          }
+        }).catch((err) => {
+          console.log(err)
+        })
+      }
     }
   }
 }
@@ -375,7 +418,8 @@ export default {
   line-height: 18px;
 }
 .settlementCount{
-  text-align: right;
+  /* text-align: right; */
+  text-align: left;
   font-size: 14px;
   padding: 7px 20px 7px 0;
 }
@@ -390,6 +434,14 @@ export default {
   width: 60%;
   height: 100%;
   background: #ccc;
+  line-height: 54px;
+  text-align: center;
+  color: #fff;
+}
+.settlement_right_selected{
+  width: 60%;
+  height: 100%;
+  background: #ff6b04;
   line-height: 54px;
   text-align: center;
   color: #fff;

@@ -4,9 +4,9 @@ let query = require('./../../model/db')
 
 let sql = {
   getByPhone: 'SELECT * FROM `user` WHERE `phone` = ? and `status` = ?',
-  queryAddress: 'SELECT * FROM `address` WHERE `phone` = ?',
+  queryAddress: 'SELECT * FROM `address` WHERE `account` = ?',
   queryOne: 'SELECT * FROM `address` WHERE `id` = ?',
-  insert: 'INSERT INTO `address` (name,phone,province,city,district,site,type) VALUES(?,?,?,?,?,?,?)',
+  insert: 'INSERT INTO `address` (name,account,phone,province,city,district,site,type) VALUES(?,?,?,?,?,?,?,?)',
   updateAddress: 'UPDATE `address` SET name = ?,phone = ?,province = ?,city = ?,district = ?,site = ?,type = ? WHERE `id` = ?',
   delete: 'DELETE FROM `address` WHERE `phone` = ?'
 }
@@ -17,7 +17,7 @@ address.get('/api/get_address', async (req, res) => {
   let body = req.query
   if (body.status == 1) {
     //校验登录状态
-    let rows = await query(sql.queryAddress,[body.phone])
+    let rows = await query(sql.queryAddress,[body.account])
     // console.log(rows)
     if (rows.length != 0) {
       res.json({
@@ -72,7 +72,7 @@ address.post('/api/update_address', async (req, res) => {
       data: []
     })
   } else {
-    let add_address = await query(sql.insert, [body.name,body.phone,body.province,body.city,body.district,body.site,body.type])
+    let add_address = await query(sql.insert, [body.name,body.account,body.phone,body.province,body.city,body.district,body.site,body.type])
     res.json({
       code: 0,
       msg: '操作成功',

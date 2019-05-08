@@ -7,7 +7,7 @@ let sql = {
   queryShopcart: 'SELECT * FROM `shopcart` WHERE `phone` = ? and `shop_id` = ?',
   queryFromType: 'SELECT * FROM `shops` WHERE `type` = ?',
   addShop: 'INSERT INTO `shopcart` (`phone`,`shop_id`,`shop_count`,`total_price`,`selected`) VALUES(?,?,?,?,?)',
-  updateShopcart: 'UPDATE `shopcart` SET `shop_count` = ?, `total_price` = ? WHERE `phone` = ? and `shop_id` = ?',
+  updateShopcart: 'UPDATE `shopcart` SET `shop_count` = ?, `total_price` = ? ,`selected` = ? WHERE `phone` = ? AND `shop_id` = ?',
   getAll: 'SELECT shops.id,shops.name,shops.picture,shops.format,shops.price,shops.old_price,shopcart.shop_count,shopcart.total_price,shopcart.selected FROM `shopcart`,`shops` WHERE shopcart.shop_id = shops.id'
 }
 
@@ -43,7 +43,7 @@ shopcart_shop.post('/api/update_shopcart', async (req, res) => {
   let body = req.body
   let check_shopcart = await query(sql.queryShopcart,[body.phone,body.shop_id])
   if (check_shopcart.length != 0) {
-    let update_shopcart_list = await query(sql.updateShopcart, [body.shop_count,body.total_price,body.phone,body.shop_id])
+    let update_shopcart_list = await query(sql.updateShopcart, [body.shop_count,body.total_price,body.selected,body.phone,body.shop_id])
     res.json({
       code: 0,
       msg: '操作成功',
@@ -57,6 +57,18 @@ shopcart_shop.post('/api/update_shopcart', async (req, res) => {
       data: []
     })
   }
+})
+
+shopcart_shop.post('/api/shopcart/update', async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  let body = req.body
+  console.log(body)
+  let update_cart = query(sql.updateShopcart, [body.shop_count,body.total_price,body.selected,body.phone,body.id])
+  res.json({
+    code: 0,
+    msg: '操作成功',
+    data: []
+  })
 })
 
 // shop_info.get('/api/get_shop_picture', async (req, res) => {

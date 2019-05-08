@@ -128,7 +128,8 @@ export default {
         phone: '',
         shop_id: '',
         shop_count: '',
-        total_price: ''
+        total_price: '',
+        selected: ''
       }
     }
   },
@@ -148,6 +149,7 @@ export default {
   },
   mounted () {
     initScroll(this.scroll, this.$refs.recommendInfoWrapper)
+    this.count = 0
   },
   methods: {
     getShopInfo () {
@@ -201,7 +203,8 @@ export default {
         phone: '',
         shop_id: '',
         shop_count: '',
-        total_price: ''
+        total_price: '',
+        selected: ''
       }
     },
     goBack () {
@@ -212,14 +215,11 @@ export default {
     },
     toShopCart () {
       this.resetForm()
-      if (!this.shopcart_info) {
-        this.form.phone = localStorage.phone
-      } else {
-        this.form.phone = this.shopcart_info.phone
-      }
+      this.form.phone = localStorage.phone
       this.form.shop_id = this.listQuery.shop_id
       this.form.shop_count = this.count
       this.form.total_price = this.count * this.shop_info.price
+      this.form.selected = 1
       if (localStorage.login_status == 1) {
         if (this.count == 0) {
           this.$router.push('/shopcart')
@@ -248,16 +248,17 @@ export default {
           clearInterval(this.timer)
         }, 1000)
       } else {
-        if (this.count >= 5) {
+        if (this.form.shop_count >= 5) {
           this.addTips = '已经达到最大数量了哦'
           this.showTips = true
           this.timer = setTimeout(() => {
             this.showTips = false
             clearInterval(this.timer)
           }, 1000)
+          this.count = this.form.shop_count
           return false
         }
-        this.count ++
+        this.form.shop_count ++
       }
     }
   }

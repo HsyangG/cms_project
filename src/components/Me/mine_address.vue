@@ -65,7 +65,7 @@ export default {
       showDialog: false,
       is_disable: false,
       listQuery:{
-        phone: '',
+        account: '',
         status: ''
       },
       list: null,
@@ -78,7 +78,7 @@ export default {
   },
   mounted () {
     this.title = this.$route.meta.title || ''
-    this.listQuery.phone = localStorage.phone
+    this.listQuery.account = localStorage.phone
     this.listQuery.status = localStorage.login_status
     this.$nextTick(() => {
       initScroll(this.scroll,this.$refs.myAddress)
