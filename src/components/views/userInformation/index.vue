@@ -64,7 +64,29 @@
               </div>
             </div>
           </li>
+          <li>
+            <div class="list_content">
+              <div class="list_left">
+                <span>账户余额</span>
+              </div>
+              <div class="list_right">
+                <span style="margin-right: 5px;">&yen; {{user_info.over}}</span>
+                <svg-icon icon-class="qianjin"></svg-icon>
+              </div>
+            </div>
+          </li>
           <li style="width: 100%;height: 15px;"></li>
+          <li>
+            <div class="list_content">
+              <div class="list_left">
+                <span>修改支付密码</span>
+              </div>
+              <div class="list_right">
+                <!-- <span style="margin-right: 5px;">username</span> -->
+                <svg-icon icon-class="qianjin"></svg-icon>
+              </div>
+            </div>
+          </li>
           <li>
             <div class="list_content">
               <div class="list_left">

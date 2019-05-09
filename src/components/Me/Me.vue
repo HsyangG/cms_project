@@ -30,10 +30,10 @@
             <span class="icon-daipingjia"></span>
             <span style="font-size: 12px;margin-top: 5px;">已完成</span>
           </li>
-          <li class="afterSale">
+          <!-- <li class="afterSale">
             <span class="icon-weixiu"></span>
             <span style="font-size: 12px;margin-top: 5px;">退换修</span>
-          </li>
+          </li> -->
         </ul>
       </div>
       <div class="split"></div>
@@ -313,7 +313,8 @@ export default {
 }
 .payManage li{
   float: left;
-  width: 25%;
+  /* width: 25%; */
+  width: 33.33%;
   height: 93px;
   text-align: center;
   font-size: 20px;

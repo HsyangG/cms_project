@@ -10,36 +10,40 @@
       </div>
       <!-- 这里用 v-if 会报错，用 v-show 则不会 -->
     <div v-show="login_status == 1" class="listContent"  ref="listContentWrapper">
-        <div class="goodsList">
-          <div class="goodsListItem" v-for="item in selected" :key="item.id">
-            <div class="goodsListItemStatus" @click="selectOne(item)">
-              <svg-icon v-if="item.selected == 1" icon-class="selected" style="width: 18px;height: 18px;background: #ff6a20;border-radius: 50%;"></svg-icon>
-              <div v-else class="selected"></div>
-              <!-- <input type="checkbox" class="checkedbox" :value="item.id"> -->
-            </div>
-            <div class="goodsListItemInfo">
-              <div class="goodsListItemImage">
-                <img v-if="item.picture" :src="item.picture" alt="" style="width: 100%;height: 100%;">
-              </div>
-              <div class="goodsListItemInfoComtent">
-                <div class="goodsListItemInfoTitle">{{item.name}}</div>
-                <div class="goodsListItemInfoDescription">{{item.format}}</div>
-                <div class="goodsListItemInfoPrice"><span class="newPrice">&yen;{{item.price}}</span> <span class="oldPrice" v-if="item.price != item.old_price">&yen;{{item.old_price}}</span></div>
-              </div>
-            </div>
-            <!-- <div class="goodsListItemCount">
-              <div style="border-right: 1px solid #ccc;" @click="onLess(item.shop_count, item.price, item.total_price)">
-                <svg-icon icon-class="jian" />
-              </div>
-              <div style="font-size: 14px;">{{item.shop_count + count}}</div>
-              <div style="border-left: 1px solid #ccc;" @click="onAdd(item.shop_count, item.price, item.total_price)">
-                <svg-icon icon-class="tianjia" />
-              </div>
-            </div> -->
-            <v-cartcontrol :good="item"></v-cartcontrol>
+      <div class="goodsList">
+        <div class="goodsListItem" v-for="item in selected" :key="item.id">
+          <div class="goodsListItemStatus" @click="selectOne(item)">
+            <svg-icon v-if="item.selected == 1" icon-class="selected" style="width: 18px;height: 18px;background: #ff6a20;border-radius: 50%;"></svg-icon>
+            <div v-else class="selected"></div>
+            <!-- <input type="checkbox" class="checkedbox" :value="item.id"> -->
           </div>
+          <div class="goodsListItemInfo">
+            <div class="goodsListItemImage">
+              <img v-if="item.picture" :src="item.picture" alt="" style="width: 100%;height: 100%;">
+            </div>
+            <div class="goodsListItemInfoComtent">
+              <div class="goodsListItemInfoTitle">{{item.name}}</div>
+              <div class="goodsListItemInfoDescription">{{item.format}}</div>
+              <div class="goodsListItemInfoPrice"><span class="newPrice">&yen;{{item.price}}</span> <span class="oldPrice" v-if="item.price != item.old_price">&yen;{{item.old_price}}</span></div>
+            </div>
+          </div>
+          <!-- <div class="goodsListItemCount">
+            <div style="border-right: 1px solid #ccc;" @click="onLess(item.shop_count, item.price, item.total_price)">
+              <svg-icon icon-class="jian" />
+            </div>
+            <div style="font-size: 14px;">{{item.shop_count + count}}</div>
+            <div style="border-left: 1px solid #ccc;" @click="onAdd(item.shop_count, item.price, item.total_price)">
+              <svg-icon icon-class="tianjia" />
+            </div>
+          </div> -->
+          <v-cartcontrol :good="item"></v-cartcontrol>
+        </div>
+        <div v-if="!shopList" class="no_data">
+          <img src="@/assets/placeholder.png" alt="" style="display: inline-block;width: 60%;height: 60%">
+          <p class="no_data_tips">购物车里什么都没有！</p>
         </div>
       </div>
+    </div>
     </div>
     <div class="footer" v-show="login_status == 1">
       <div class="settlement">
@@ -462,5 +466,13 @@ export default {
   border-radius: 50%;
   -webkit-appearance: none;
   outline: none;
+}
+.no_data{
+  width: 100%;
+  padding-top: 100px;
+}
+.no_data_tips{
+  margin-top: 30px;
+  color: #9c9c9c;
 }
 </style>

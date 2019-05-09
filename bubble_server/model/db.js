@@ -23,6 +23,7 @@ let query = function(sql, value) {
       } else {
         connection.query(sql, value, (err, rows) => {
           if (err) {
+            console.log(err)
             reject(err)
           } else {
             // console.log(rows)

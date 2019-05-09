@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <div class="headerContent">
+    <!-- <div class="headerContent">
       <div class="scan"><i class="icon-saoyisao" v-show="scanShow"></i></div>
       <div class="search-group">
         <div class="magnifier" @click.prevent="toHome(linkTo)" ref="mag">
@@ -14,6 +14,20 @@
       <div class="news">
         <i class="icon-pinglun" v-show="review"></i>
         <span v-show="!review" @click.prevent="sendToSearch">搜索</span>
+      </div>
+    </div> -->
+    <div class="header_content">
+      <div class="go_back" @click="goBack">
+        <div class="back_logo">
+          <svg-icon icon-class="houtui"></svg-icon>
+        </div>
+      </div>
+      <div class="search_content">
+        <input class="input_style" type="search" v-show="searchShow" :value="inputPlaceholder" ref="input">
+        <div class="input_text" v-show="!searchShow" @click.prevent="toHome">{{inputPlaceholder}}</div>
+      </div>
+      <div class="search_text" @click="sendToSearch">
+        <div>搜索</div>
       </div>
     </div>
   </div>
@@ -60,6 +74,9 @@ export default {
     }
   },
   methods: {
+    goBack () {
+      this.$router.go(-1)
+    },
     toHome (str) {
       if (str === '/home') {
         this.$router.push(str)
@@ -104,7 +121,7 @@ export default {
   width: 100%;
   height: 50px;
 }
-.headerContent{
+/* .headerContent{
   position: relative;
   line-height: 50px;
   font-size: 20px;
@@ -184,6 +201,37 @@ export default {
   font-weight: 700;
   line-height: 20px;
   text-align: center;
+} */
+.header_content{
+  display: flex;
+  width: 100%;
+  /* height: 100%; */
+  /* background: rgba(0,0,0,0.5); */
+  padding: 0 15px;
+  box-sizing: border-box;
 }
-{}
+.back_logo{
+  width: 30px;
+  padding: 15px 0;
+  margin-right: 10px;
+}
+.search_content{
+  padding: 15px 0;
+  width: 100%;
+}
+.input_style{
+  width: 100%;
+  outline: none;
+  border: none;
+}
+.input_text{
+  text-align: left;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+.search_text{
+  padding: 15px 0;
+  width: 70px;
+  text-align: right;
+}
 </style>

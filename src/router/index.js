@@ -51,6 +51,18 @@ export default new Router({
       meta: { title: '支付订单' }
     },
     {
+      path: '/shopcart/add_address',
+      name: 'select_address',
+      component: () => import('@/components/shopcart/selectedAddress'),
+      meta: { title: '选择地址' }
+    },
+    {
+      path: '/shopcart/pay_success',
+      name: 'pay_success',
+      component: () => import('@/components/shopcart/orderSuccess'),
+      meta: { title: '下单成功' }
+    },
+    {
       name: 'me',
       path: '/me',
       component: Me
@@ -84,6 +96,12 @@ export default new Router({
       name: 'add_address',
       component: () => import('@/components/Me/mine_address_add'),
       meta: { title: '添加地址' }
+    },
+    {
+      path: '/me/setting/about',
+      name: 'about_bubble',
+      component: () => import('@/components/Me/about'),
+      meta: { title: '关于气泡' }
     },
     {
       path: '/member',

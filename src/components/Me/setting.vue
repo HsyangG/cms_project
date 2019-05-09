@@ -40,9 +40,9 @@
           <li style="width: 100%;height: 15px;"></li>
           <li>
             <div class="list_title">关于</div>
-            <div class="list_content">
+            <div class="list_content" @click="toAbout">
               <div class="list_left">
-                <span>关于商城</span>
+                <span>关于气泡网上商城</span>
               </div>
               <div class="list_right">
                 <!-- <span style="margin-right: 5px;">username</span> -->
@@ -106,6 +106,9 @@ export default {
     },
     toMineAddress () {
       this.$router.push('/me/mine_address')
+    },
+    toAbout () {
+      this.$router.push('/me/setting/about')
     },
     toLogout () {
       // this.$axios.post('/api/logout', qs.stringify(this.listQuery))

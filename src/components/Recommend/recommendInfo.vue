@@ -46,6 +46,14 @@
               <div class="go_ahead"></div>
             </div>
           </li>
+          <li class="good_size">
+            <!-- 退货标志 -->
+            <div class="good_size_item" style="border: none;">
+              <div class="good_selected"></div>
+              <div class="good_name" style="font-weight: 500;color: #9c9c9c;"><svg-icon icon-class="icon_selected"></svg-icon> 每人仅限购5台设备</div>
+              <div class="go_ahead"></div>
+            </div>
+          </li>
         </ul>
       </div>
       <div class="div_split"></div>
@@ -305,7 +313,7 @@ export default {
 }
 .header{
   width: 100%;
-  height: 142px;
+  min-height: 142px;
   box-sizing: border-box;
   padding: 15px;
   text-align: left;
@@ -353,7 +361,7 @@ export default {
 }
 .size_and_address{
   width: 100%;
-  height: 120px;
+  /* height: 120px; */
 }
 .good_size{
   width: 100%;

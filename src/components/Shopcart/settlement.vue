@@ -17,7 +17,7 @@
       <div class="address">
         <div>
           <ul v-if="address_list">
-            <li v-for="item in address_list" v-if="item.type == 'moren'" :key="item.id">
+            <li v-for="item in address_list" v-if="selectIndex == item.id" :key="item.id">
               <div class="address_box">
                 <div class="address_title">收货地址</div>
                 <div @click="toSelectAddress">
@@ -36,6 +36,27 @@
                 </div>
               </div>
             </li>
+            <!-- <li v-else>
+              <div v-for="item in address_list" v-if="item.selected" :key="item.id">
+                <div class="address_box">
+                  <div class="address_title">收货地址</div>
+                  <div @click="toSelectAddress">
+                    <div class="address_type">
+                      <span v-if="item.type == 'home'">家庭地址</span>
+                      <span v-else-if="item.type == 'company'">工作地址</span>
+                      <span v-else-if="item.type == 'moren'">默认地址</span>
+                      <span v-else>未知类型</span>
+                    </div>
+                    <div class="address_name">我的姓名: <span>{{item.name}}</span></div>
+                    <div class="address_phone">联系电话: <span>{{item.phone}}</span></div>
+                    <div class="address_address">我的地址: <span>{{item.province}} {{item.city}} {{item.district}} {{item.site}}</span></div>
+                  </div>
+                  <div class="address_go_ahead">
+                    <svg-icon icon-class="qianjin"></svg-icon>
+                  </div>
+                </div>
+              </div>
+            </li> -->
           </ul>
         </div>
       </div>
@@ -105,6 +126,7 @@
 <script>
 import { initScroll } from '@/utils/index'
 import qs from 'qs'
+import { setTimeout, clearTimeout } from 'timers';
 export default {
   data () {
     return {
@@ -129,8 +151,10 @@ export default {
         payment: '',
         shop_count: '',
         total_price: '',
-        shop_list: null
+        address_id: '',
+        shopList: null
       },
+      selectIndex: 1, // 第三条数据是默认地址，进入页面默认选中默认地址
     }
   },
   watch:{
@@ -149,9 +173,12 @@ export default {
     if (this.listQuery.account) {
       this.getAddress()
     }
+    this.getShopList()
+    // 页面创建就接收传递过来的selectIndex
+    // this.$root.eventHub.$on('selectAddress', this.selectOne)
+    this.selectIndex = this.$route.query.selected || '1' // 第三条数据是默认地址，进入页面默认选中默认地址
   },
   mounted () {
-    this.getShopList()
     this.$nextTick(() => {
       initScroll(this.scroll, this.$refs.shopList)
     })
@@ -201,10 +228,13 @@ export default {
         payment: '',
         shop_count: '',
         total_price: '',
-        shop_list: null
+        address_id: '',
+        shopList: null
       }
     },
-    toSelectAddress () {},
+    toSelectAddress () {
+      this.$router.push('/shopcart/add_address')
+    },
     toPay () {
       this.showDialog = true
     },
@@ -220,16 +250,42 @@ export default {
       this.form.payment = this.payment
       this.form.shop_count = this.shop_count
       this.form.total_price = this.total_price
-      this.form.shopList = this.shopList
+      this.form.address_id = this.selectIndex
+      this.form.shopList = JSON.stringify(this.shopList)
       console.log(this.form)
-      this.$axios.post('/api/user/info', this.form, {
-        headers: {
-          'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'
+      this.$axios.post('/api/user/info', qs.stringify(this.form))
+      .then((response) => {
+        if (response.data.code == 0) {
+          // console.log(response.data.data)
+          this.$router.push('/shopcart/pay_success')
+        } else {
+          /**
+           * 当服务器返回错误状态码的时候
+           * 通过提示器显示错误提示，提示1.5s后自动消失
+           */
+          this.addTips = response.data.msg
+          this.showDialog = false
+          this.showTips = true
+          setTimeout(() => {
+            this.showTips = false
+            clearTimeout
+          }, 1500)
         }
+      }).catch((err) => {
+        console.log(err)
+      })
+      .finally(() => {
+        // this.showDialog = false
+        this.payment = '' // 退出弹框将支付密码清空
       })
     },
     handleCancel () {
       this.showDialog = false
+      this.payment = '' // 退出弹框将支付密码清空
+    },
+    selectOne (index) {
+      this.selectIndex = index
+      console.log(index)
     }
   }
 }
