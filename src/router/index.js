@@ -48,7 +48,7 @@ export default new Router({
       path: '/shopcart/settlement',
       name: 'settlement',
       component: () => import('@/components/shopcart/settlement'),
-      meta: { title: '支付订单' }
+      meta: { title: '支付订单', keepAlive: false }
     },
     {
       path: '/shopcart/add_address',

@@ -5,12 +5,12 @@
         <div class="carouselMap">
           <v-carousel :carouselList="carouselList"></v-carousel>
         </div>
-        <v-submenu></v-submenu>
+        <v-submenu :submenuType="1"></v-submenu>
         <div class="splitDiv"></div>
         <div class="dailySelectionTitle">热卖爆品</div>
         <div class="dailySelectionContentList">
           <ul>
-            <li v-for="item in shopList" :key="item.id" v-if="item.type != 'phone' && item.type != 'television' && item.type != 'computer'">
+            <li v-for="item in shopList" :key="item.id" v-if="item.type != 'phone' && item.type != 'television' && item.type != 'computer'" @click="toRecommendInfo(item.id)">
               <div class="dailySelectContentListLeft"  style="width: 100%;height: 100%;">
                 <img v-if="item.picture" :src="item.picture" alt="" style="width: 100%;height: 200px;">
                 <p class="dailyTitle">{{item.name}}</p>
@@ -69,6 +69,9 @@ export default {
         console.log(err)
       });
     },
+    toRecommendInfo (val) {
+      this.$router.push('/recommend/recommend_info?id=' + val)
+    }
   }
 }
 </script>

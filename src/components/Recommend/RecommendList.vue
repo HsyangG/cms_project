@@ -5,7 +5,7 @@
         <div class="carouselMap">
           <v-carousel :carouselList="carouselList"></v-carousel>
         </div>
-        <v-submenu></v-submenu>
+        <v-submenu :submenuType="1"></v-submenu>
         <div class="line"></div>
         <div class="morningNewspaper">
           <img src="http://localhost:3000/public/img/img/shangchengzaobao.png" alt="">
@@ -14,15 +14,16 @@
         </div>
         <div class="shopList">
           <div class="content">
-            <div class="contentLeft" @click.prevent="toRecommendInfo(hot_shops[0].id)">
+            <!-- hot_shop 使用的是shop_id，而不是id -->
+            <div class="contentLeft" @click.prevent="toRecommendInfo(hot_shops[0].shop_id)">
               <img v-if="hot_shops" :src="hot_shops[0].picture" alt="" style="width: 100%;height: 100%">
             </div>
             <div class="splitDiv"></div>
             <div class="contentRight">
-              <div class="contentRightTop">
+              <div class="contentRightTop" @click.prevent="toRecommendInfo(hot_shops[1].shop_id)">
                 <img v-if="hot_shops" :src="hot_shops[1].picture" alt="" style="width: 100%;height: 100%">
               </div>
-              <div class="contentRightButton">
+              <div class="contentRightButton" @click.prevent="toRecommendInfo(hot_shops[2].shop_id)">
                 <img v-if="hot_shops" :src="hot_shops[2].picture" alt="" style="width: 100%;height: 100%">
               </div>
             </div>

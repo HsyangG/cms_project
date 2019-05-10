@@ -208,7 +208,7 @@ export default {
       .then((response) => {
         if (response.data.code == 0) {
           this.shopList = response.data.data
-          // console.log(this.shopList)
+          console.log(this.shopList)
           for (let i = 0; i < this.shopList.length; i++) {
             this.total_price = this.total_price + this.shopList[i].total_price
             this.shopList[i].phone = localStorage.phone

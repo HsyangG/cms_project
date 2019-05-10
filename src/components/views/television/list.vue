@@ -1,22 +1,28 @@
 <template>
   <div class="television_list">
     <div class="list_header">
-      <div class="go_back" @click.prevent.prevent="goBack">
+      <!-- <div class="go_back" @click.prevent.prevent="goBack">
         <svg-icon icon-class="houtui"></svg-icon>
-      </div>
+      </div> -->
       <v-header :scanShow="false"></v-header>
     </div>
     <div class="television_wrapper" ref="televisionWrapper">
       <div class="listContent">
-        <div class="title">电脑</div>
+        <div class="title">
+          <span v-if="title == 'computer'">电脑</span>
+          <span v-else-if="title == 'television'">电视</span>
+          <span v-else> </span>
+        </div>
         <ul>
-          <li>
+          <li v-for="item in shopList" :key="item.id"  v-if="item.type == title" @click="toRecommendInfo(item.id)">
             <div class="list_item">
-              <div class="item_image"><img src="" alt=""></div>
+              <div class="item_image">
+                <img v-if="item.picture" :src="item.picture" alt="" style="width: 100%;height: 100%">
+              </div>
               <div class="item_info">
-                <div class="item_info_title">笔记本15.6" 独显版</div>
-                <div class="item_info_description">全面均衡的国民轻薄本</div>
-                <div class="item_info_price">&yen;3999 <span>起</span></div>
+                <div class="item_info_title">{{item.name}}</div>
+                <div class="item_info_description">{{item.description}}</div>
+                <div class="item_info_price">&yen;{{item.price}} <span>起</span></div>
               </div>
             </div>
           </li>
@@ -30,7 +36,14 @@
 import { initScroll } from '@/utils/index'
 export default {
   data () {
-    return {}
+    return {
+      title: '',
+      shopList: null
+    }
+  },
+  created () {
+    this.title = this.$route.query.type || ''
+    this.getShopList()
   },
   mounted () {
     initScroll(this.scroll, this.$refs.televisionWrapper)
@@ -38,6 +51,21 @@ export default {
   methods: {
     goBack () {
       this.$router.push('/home')
+    },
+    getShopList () {
+      this.$axios.get('/api/get_shops_info')
+      .then((response) => {
+        if (response.data.code == 0) {
+          this.shopList = response.data.data
+        } else {
+          console.log(response.data.msg)
+        }
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
+    toRecommendInfo (val) {
+      this.$router.push('/recommend/recommend_info?id=' + val)
     }
   }
 }
@@ -102,10 +130,12 @@ export default {
 }
 .item_info_title{
   font-weight: 700;
+  word-break: break-all;
 }
 .item_info_description{
   margin-top: 5px;
   font-size: 12px;
+  padding-right: 10px;
 }
 .item_info_price{
   font-size: 14px;
@@ -113,5 +143,4 @@ export default {
   margin-top: 10px;
   color: #eb635b;
 }
-{}
 </style>

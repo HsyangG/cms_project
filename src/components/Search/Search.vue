@@ -1,17 +1,32 @@
 <template>
   <transition name="move">
     <div class="search">
-      <v-header :scanShow="scanShow" :searchShow="searchShow" :delBtn="delBtn" :magShow="magShow" :linkTo="linkTo" :review="review"></v-header>
-      <div class="searchBody">
-        <div class="recommendationSearch">
-          <p>热门搜索</p>
-          <img src="./../../assets/img/tuijiansousuo.jpg" alt="...">
-          <div class="rcdContent" ref="redContent">
-            <div>{{redContent}}</div>
+      <div class="header">
+        <div class="header_content">
+          <div class="go_back" @click="goBack">
+            <div class="back_logo">
+              <svg-icon icon-class="houtui"></svg-icon>
+            </div>
+          </div>
+          <div class="search_content">
+            <input class="input_style" type="search" v-model="inputPlaceholder" ref="input">
+          </div>
+          <div class="search_text" @click="sendToSearch">
+            <div>搜索</div>
           </div>
         </div>
-        <div class="split" v-show="showHty"></div>
-        <div class="searchRecord" v-show="showHty">
+      </div>
+      <div class="searchBody">
+        <div class="recommendationSearch">
+          <p>搜索结果</p>
+          <!-- <img src="./../../assets/img/tuijiansousuo.jpg" alt="..."> -->
+          <div class="rcdContent" ref="redContent" v-if="searchResult" v-for="item in searchResult" :key="item.id">
+            <div>{{item.name}}</div>
+          </div>
+          <div v-if="!searchResult" style="padding-bottom: 15px;color: #ccc;background: #fff;">{{err_message}}</div>
+        </div>
+        <div class="split"></div>
+        <div class="searchRecord">
           <p>搜索记录</p>
           <div class="line"></div>
           <div class="hsyWrapper" ref="hsyWrapper">
@@ -43,11 +58,16 @@ export default {
       review: false,
       redContent: '净水滤芯免费领',
       history: [],
-      showHty: false
+      showHty: false,
+      searchResult: null,
+      inputList: [],
+      inputPlaceholder: '点读派',
+      err_message: '暂无商品信息'
     }
   },
   mounted () {
-    this.$root.eventHub.$on('showSearch', this.showHistory)
+    // this.$root.eventHub.$on('showSearch', this.showHistory)
+    // this.$root.eventHub.$on('on_search', this.getSearchResult)
     this.$nextTick(() => {
       this.initScroll()
     })
@@ -69,7 +89,59 @@ export default {
       } else {
         this.scroll.refresh()
       }
-    }
+    },
+    goBack () {
+      this.$router.go(-1)
+    },
+    sendToSearch () {
+      // this.inputPlaceholder = []
+      let input = this.inputList
+      input.push((this.inputPlaceholder).replace(/\s+/g, '')) // 去除输入字符串的空格
+      // let _input = this.removeDuplicates(input) // 去除重复的输入内容
+      // this.$root.eventHub.$emit('showSearch', _input)
+      this.history = input
+      this.$axios.get('/api/shops/search', {
+        params: {
+          // 把首尾的空格去掉
+          search: this.inputPlaceholder.replace(/\s+/g, '')
+        }
+      }, {
+        headers: {
+          'Content-Type':'application/json;charset=UTF-8'
+        }
+      })
+      .then((response) => {
+        if (response.data.code == 0) {
+          this.searchResult = response.data.data
+        } else {
+          console.log(response.data.msg)
+          this.searchResult = null
+          this.err_message = response.data.msg
+        }
+      }).catch((err) => {
+        console.log(err)
+      });
+    },
+    // unique (arr) {
+    //   // 如果从头部传入的值在数组中已存在，则删除这个相同的值
+    //   let hash = []
+    //   for (let i = 0; i < arr.length; i++) {
+    //     if (arr.indexOf(arr[i]) === i) {
+    //       hash.push(arr[i])
+    //     }
+    //   }
+    //   return hash
+    // },
+    // removeDuplicates (arr) {
+    //   let history = this.unique(arr) // 如果从头部传入的值在数组中已存在，则删除这个相同的值
+    //   for (let i = 0; i < history.length; i++) {
+    //     let hist = history[i]
+    //     if (hist === '') {
+    //       history.splice(i, 1) // 如果传入空串，则不显示搜索记录，并删除空串
+    //     }
+    //   }
+    //   return history
+    // },
   }
 }
 </script>
@@ -109,7 +181,8 @@ export default {
     width: 100%;
   }
   .rcdContent{
-    width: 90%;
+    /* width: 90%; */
+    display: inline-block;
     padding: 11px 0 15px 15px;
     text-align: left;
   }
@@ -126,6 +199,38 @@ export default {
     background: #fff;
     overflow: hidden;
   }
+  .header_content{
+  display: flex;
+  width: 100%;
+  /* height: 100%; */
+  /* background: rgba(0,0,0,0.5); */
+  padding: 0 15px;
+  box-sizing: border-box;
+}
+.back_logo{
+  width: 30px;
+  padding: 15px 0;
+  margin-right: 10px;
+}
+.search_content{
+  padding: 15px 0;
+  width: 100%;
+}
+.input_style{
+  width: 100%;
+  outline: none;
+  border: none;
+}
+.input_text{
+  text-align: left;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+.search_text{
+  padding: 15px 0;
+  width: 70px;
+  text-align: right;
+}
   .searchRecord p{
     background: #fff;
     padding: 11px 15px;

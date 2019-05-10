@@ -36,6 +36,7 @@
               <svg-icon icon-class="tianjia" />
             </div>
           </div> -->
+          <!-- 负责维护购物车商品数量的购车控制组件 -->
           <v-cartcontrol :good="item"></v-cartcontrol>
         </div>
         <div v-if="!shopList" class="no_data">
@@ -74,6 +75,7 @@
 import { initScroll } from '../../utils'
 import Cartchntrol from './../cartcontrol/index'
 import qs from 'qs'
+import { setTimeout, clearTimeout } from 'timers';
 
 export default {
   components: {
@@ -101,7 +103,12 @@ export default {
         total_price: 0.00,
         selected: ''
       },
-      selected: ''
+      selected: '',
+      form_update_shopcart: {
+        // 用于保存shopList数组，传到服务器
+        shopList: null
+      },
+      success_code: '', // 保存更新购物车的成功状态码
     }
   },
   computed: {
@@ -185,7 +192,7 @@ export default {
     },
     onLess (data) {
       // 当修改购物车数据的时候同时修改shopList的内容以保持同步
-      console.log(data)
+      // console.log(data)
       this.less_item = data
       // this.total_price = this.less_item.total_price
       for (let i = 0; i < this.shopList.length; i++) {
@@ -197,7 +204,7 @@ export default {
       console.log(this.shopList)
     },
     onAdd (data) {
-      console.log(data)
+      // console.log(data)
       this.add_item = data
       // this.total_price = this.add_item.total_price
       for (let i = 0; i < this.shopList.length; i++) {
@@ -227,21 +234,58 @@ export default {
       this.selectedAll = !this.selectedAll
     },
     toSettlement () {
-      this.form = this.shopList
+      // this.form = this.shopList
       // console.log(this.form)
-      for (let i = 0; i < this.form.length; i++) {
-        this.$axios.post('/api/shopcart/update', qs.stringify(this.form[i]))
-        .then((response) => {
-          if (response.data.code == 0) {
-            this.$router.push('/shopcart/settlement?phone=' + localStorage.phone)
-          } else {
-            console.log(response.data.msg)
-          }
-        }).catch((err) => {
-          console.log(err)
-        })
+      // for (let i = 0; i < this.form.length; i++) {
+      //   this.$axios.post('/api/shopcart/update', qs.stringify(this.form[i]))
+      //   .then((response) => {
+      //     if (response.data.code == 0) {
+      //       this.$router.push('/shopcart/settlement?phone=' + localStorage.phone)
+      //     } else {
+      //       console.log(response.data.msg)
+      //     }
+      //   }).catch((err) => {
+      //     console.log(err)
+      //   })
+      // }
+      this.updateShopCart()
+      // success_code == 0，则更新成功，跳转到支付页面
+      if (this.success_code == 0) {
+        // 这里延迟200ms再请求跳转到支付页面，目的是为了
+        // 为了等数据库更新完毕再拉取新的数据
+        // 200ms的延迟用户是几乎没有感觉的提高用户体验
+        setTimeout(() => {
+          this.$router.push('/shopcart/settlement?phone=' + localStorage.phone)
+          clearTimeout
+        }, 300)
       }
+    },
+    /**
+     * 因为axios的qs.stringify直接将数组序列化后，在后端接收的数据会出现问题
+     * 所以要将需要传递的数组保存到一个对象中，在保存之前先将数组转换成字符串
+     * 后端通过JSON.parse再将序列化后的数组转换成对象，就能获取到正确的数据了
+     */
+    updateShopCart () {
+      let shopData = JSON.stringify(this.shopList)
+      this.form_update_shopcart.shopList = shopData
+      // console.log(shopData)
+      this.$axios.post('/api/leave_and_update', qs.stringify(this.form_update_shopcart))
+      .then((response) => {
+        if (response.data.code == 0) {
+          // console.log(response.data.data)
+          this.success_code = response.data.code
+        } else {
+          console.log(response.data.msg)
+          this.success_code = response.data.code
+        }
+      }).catch((err) => {
+        console.log(err)
+      })
     }
+  },
+  beforeDestroy () {
+    // 当用户离开购物车时，更新一次购物车信息
+    this.updateShopCart()
   }
 }
 </script>

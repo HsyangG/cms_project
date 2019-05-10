@@ -27,7 +27,7 @@
             <div class="good_size_item">
               <div class="good_selected">已选</div>
               <div class="good_name">{{shop_info.name}} {{shop_info.format}} <span style="font-size: 12px">x</span>1</div>
-              <div class="go_ahead"><svg-icon icon-class="qianjin"></svg-icon></div>
+              <!-- <div class="go_ahead"><svg-icon icon-class="qianjin"></svg-icon></div> -->
             </div>
           </li>
           <li class="good_size">
@@ -35,7 +35,7 @@
             <div class="good_size_item">
               <div class="good_selected">送至</div>
               <div class="good_name">深圳市 龙岗区 <span style="color: #ff6a20;">有现货</span></div>
-              <div class="go_ahead"><svg-icon icon-class="qianjin"></svg-icon></div>
+              <!-- <div class="go_ahead"><svg-icon icon-class="qianjin"></svg-icon></div> -->
             </div>
           </li>
           <li class="good_size">
@@ -135,7 +135,7 @@ export default {
       form: {
         phone: '',
         shop_id: '',
-        shop_count: '',
+        shop_count: 0,
         total_price: '',
         selected: ''
       }
@@ -210,7 +210,7 @@ export default {
       this.form = {
         phone: '',
         shop_id: '',
-        shop_count: '',
+        shop_count: 0,
         total_price: '',
         selected: ''
       }
@@ -256,7 +256,10 @@ export default {
           clearInterval(this.timer)
         }, 1000)
       } else {
+        this.form.shop_count ++
+        this.count = this.form.shop_count
         if (this.form.shop_count >= 5) {
+          console.log(this.form.shop_count)
           this.addTips = '已经达到最大数量了哦'
           this.showTips = true
           this.timer = setTimeout(() => {
@@ -266,7 +269,6 @@ export default {
           this.count = this.form.shop_count
           return false
         }
-        this.form.shop_count ++
       }
     }
   }

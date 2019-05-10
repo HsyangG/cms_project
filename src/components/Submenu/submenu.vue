@@ -50,20 +50,26 @@ export default {
         ]
       }
     },
+    // 确定进入哪种列表，由调用的页面提供，默认是第一种
     submenuType: {
       type: Number,
       default: 1
+    },
+    clickType: {
+      type: String,
+      default: ''
     }
   },
   data () {
-    return {}
+    return {
+    }
   },
   methods: {
     toList (index) {
       this.$router.push('/recommend/recommend_list?id=' + index)
     },
     toListWithoutCarousel (index) {
-      this.$router.push('/views/television/list?id=' + index)
+      this.$router.push('/views/television/list?id=' + index + '&type=' + this.clickType)
     }
   }
 }

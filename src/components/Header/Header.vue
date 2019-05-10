@@ -23,7 +23,7 @@
         </div>
       </div>
       <div class="search_content">
-        <input class="input_style" type="search" v-show="searchShow" :value="inputPlaceholder" ref="input">
+        <input class="input_style" type="search" v-show="searchShow" v-model="inputPlaceholder" ref="input">
         <div class="input_text" v-show="!searchShow" @click.prevent="toHome">{{inputPlaceholder}}</div>
       </div>
       <div class="search_text" @click="sendToSearch">
@@ -91,6 +91,21 @@ export default {
       let _input = this.removeDuplicates(input) // 去除重复的输入内容
       console.log(_input)
       this.$root.eventHub.$emit('showSearch', _input)
+      this.$axios.get('/api/shops/search', {
+        params: {
+          search: _input[0]
+        }
+      }, {
+        headers: {
+          'Content-Type':'application/json;charset=UTF-8'
+        }
+      })
+      .then((response) => {
+        // 获得传递值之后，将结果传递给父组件
+        this.$root.eventHub.$emit('on_search', response.data)
+      }).catch((err) => {
+        console.log(err)
+      });
     },
     unique (arr) {
       // 如果从头部传入的值在数组中已存在，则删除这个相同的值
@@ -111,7 +126,14 @@ export default {
         }
       }
       return history
+    },
+    offEventHubListener () {
+      this.$root.eventHub.$off('showSearch')
+      this.$root.eventHub.$off('on_search')
     }
+  },
+  beforeDestroy () {
+    this.offEventHubListener()
   }
 }
 </script>

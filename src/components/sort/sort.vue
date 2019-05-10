@@ -614,7 +614,8 @@ export default {
       ],
       listHeight: [],
       currentY: 0,
-      selectedList: {}
+      selectedList: {},
+      list: null,
     }
   },
   computed: {
@@ -648,6 +649,9 @@ export default {
       return list
     }
   },
+  created () {
+    this.getClasscification()
+  },
   mounted () {
     this.$nextTick(() => {
       this._initScroll()
@@ -655,6 +659,16 @@ export default {
     })
   },
   methods: {
+    getClasscification () {
+      this.$axios.get('/api/shops/classcification')
+      .then((response) => {
+        if (response.data.code == 0) {
+          this.list = response.data.data
+        }
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
     selectMenu (index) {
       // console.log(this.currentIndex, index)
       // console.log(this.currentY)
@@ -685,17 +699,6 @@ export default {
         height += item.clientHeight // 通过 DOM 的 clientHeight 方法获取到每行第一个 li 的高度，再累加，得到每个区间的高度
         this.listHeight.push(height)
       }
-      // let i = 0
-      // while (i <= foodList.length) {
-      //   let item = foodList[i] // 获取每一个 foodList
-      //   if (item.clientHeight) {
-      //     height += item.clientHeight // 通过 DOM 的 clientHeight 方法获取到每行第一个 li 的高度，再累加，得到每个区间的高度
-      //     console.log(item.clientHeight)
-      //     this.listHeight.push(height)
-      //     console.log(this.listHeight)
-      //     i++
-      //   }
-      // }
     },
     selectFood (food) {
       this.selectedList = food

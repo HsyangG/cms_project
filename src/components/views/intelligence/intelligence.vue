@@ -113,7 +113,7 @@
                 </div>
               </div>
             </li> -->
-            <li v-for="item in shopList" :key="item.id" v-if="item.type != 'phone' && item.type != 'television' && item.type != 'computer'">
+            <li v-for="item in shopList" :key="item.id" v-if="item.type != 'phone' && item.type != 'television' && item.type != 'computer'" @click="toRecommendInfo(item.id)">
               <div class="goodsListItem">
                 <img v-if="item.picture" :src="item.picture" alt="">
                 <div class="goodsListItemContent">
@@ -202,6 +202,9 @@ export default {
         console.log(err)
       });
     },
+    toRecommendInfo (val) {
+      this.$router.push('/recommend/recommend_info?id=' + val)
+    }
   }
 }
 </script>

@@ -5,7 +5,7 @@
         <div class="carouselMap">
           <v-carousel :carouselList="carouselList" :height="305"></v-carousel>
         </div>
-        <v-submenu :submenuType="submenuType"></v-submenu>
+        <v-submenu :submenuType="submenuType" :clickType="'television'"></v-submenu>
         <div class="listTitle">
           <span>热卖爆品</span>
         </div>
@@ -61,7 +61,7 @@
                 <div class="dailyPrice">
                   <span class="dailyPriceNew">&yen;{{item.price}}&nbsp;起 </span><span class="dailyPriceOld"> &yen;{{item.old_price}}</span>
                 </div>
-                <button class="success" style="width: 50%;margin-top: 2px;">立即预约</button>
+                <button class="success" style="width: 50%;margin-top: 2px;" @click="toRecommendInfo(item.id)">立即预约</button>
               </div>
             </li>
           </ul>
@@ -112,6 +112,9 @@ export default {
         console.log(err)
       });
     },
+    toRecommendInfo (val) {
+      this.$router.push('/recommend/recommend_info?id=' + val)
+    }
   }
 }
 

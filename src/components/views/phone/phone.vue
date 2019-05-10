@@ -5,7 +5,7 @@
         <div class="carouselMap">
           <v-carousel :carouselList="carouselList"></v-carousel>
         </div>
-        <ul class="submenu">
+        <ul class="submenu" @click="toSubmenu">
           <li v-for="(item, index) in submitItemList" :class="item.class" ref="submitList" :key="index">
             <div class="submenu-item">
               <div class="imageBorder">
@@ -29,7 +29,7 @@
                 </div>
                 <div class="itemBottomRight">
                   <div class="itemPrice">&yen;{{item.price}}</div>
-                  <button class="success">立即购买</button>
+                  <button class="success" @click="toRecommendInfo(item.id)">立即购买</button>
                 </div>
               </div>
             </div>
@@ -190,6 +190,12 @@ export default {
         console.log(err)
       });
     },
+    toSubmenu () {
+      this.$router.push('/recommend/recommend_list?type=phone')
+    },
+    toRecommendInfo (val) {
+      this.$router.push('/recommend/recommend_info?id=' + val)
+    }
   }
 }
 </script>

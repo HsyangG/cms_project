@@ -15,6 +15,7 @@ shopcart_shop.get('/api/get_shopcart_shop', async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*')
   // console.log(req.body)
   let body = req.query
+  console.log(body)
   let rows = null
   if (!req.body.shop_id) {
     rows = await query(sql.getAll)
@@ -22,14 +23,13 @@ shopcart_shop.get('/api/get_shopcart_shop', async (req, res) => {
     rows = await query(sql.queryShopcart, [body.phone, body.shop_id])
   }
   // console.log(rows)
-  if (rows.length != 0) {
+  if (rows && rows.length != 0) {
     res.json({
       code: 0,
       msg: '操作成功',
       data: rows
     })
-  }
-  if (rows.length == 0) {
+  } else {
     res.json({
       code: 1,
       msg: '暂无商品信息',
@@ -62,8 +62,8 @@ shopcart_shop.post('/api/update_shopcart', async (req, res) => {
 shopcart_shop.post('/api/shopcart/update', async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*')
   let body = req.body
-  console.log(body)
-  let update_cart = query(sql.updateShopcart, [body.shop_count,body.total_price,body.selected,body.phone,body.id])
+  // console.log(body)
+  let update_cart = await query(sql.updateShopcart, [body.shop_count,body.total_price,body.selected,body.phone,body.id])
   res.json({
     code: 0,
     msg: '操作成功',
@@ -71,6 +71,31 @@ shopcart_shop.post('/api/shopcart/update', async (req, res) => {
   })
 })
 
+shopcart_shop.post('/api/leave_and_update', async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  let body = req.body
+  // console.log(body)
+  // 注意：body里面有shopList，但值为'null'，要加以判断
+  if (body && body.shopList != 'null') {
+    let shopList = JSON.parse(body.shopList)
+    for (let i = 0; i < shopList.length; i++) {
+      if (!shopList[i]) break
+      let updateShop = await query(sql.updateShopcart, [shopList[i].shop_count,shopList[i].total_price,shopList[i].selected,shopList[i].phone,shopList[i].id])
+      console.log(shopList[i])
+    }
+    res.json({
+      code: 0,
+      msg: '操作成功',
+      data: []
+    })
+  } else {
+    res.json({
+      code: 1,
+      msg: '暂无数据',
+      data: []
+    })
+  }
+})
 // shop_info.get('/api/get_shop_picture', async (req, res) => {
 //   res.setHeader('Access-Control-Allow-Origin', '*')
 //   let body = req.query

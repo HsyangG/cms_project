@@ -5,7 +5,7 @@ let sillyDatetime = require('silly-datetime') // 获取当前时间，第三方�
 
 let sql = {
   getByPhone: 'SELECT * FROM `user` WHERE `phone` = ? and `status` = ?',
-  queryOrders: 'SELECT * FROM `order` WHERE `phone` = ?',
+  queryOrders: 'SELECT * FROM `order` WHERE `phone` = ? order by `id` desc',
   queryOrderShop: 'SELECT * FROM `order`,`order_info`,`shops` WHERE order.phone = order_info.phone AND order.order_number = order_info.order_number AND order_info.shop_id = shops.id AND order.phone = ? AND order.order_number = ?',
   // queryOrderShop: 'SELECT * FROM `order_info` WHERE `phone` = ? AND `order_number` = ?',
   queryFromType: 'SELECT * FROM `shops` WHERE `type` = ?',
