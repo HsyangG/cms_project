@@ -10,6 +10,8 @@ let get_shops_picture = require('./routes/shops/getPicture')
 let get_shopcart_info = require('./routes/shopcart/getShopcartInfo')
 let get_order_info = require('./routes/orders/getOrders')
 
+let form = require('./routes/AdminSystem/Form/index')
+
 let router = express()
 
 router.use(login)
@@ -22,5 +24,7 @@ router.use(get_shops_info)
 router.use(get_shops_picture)
 router.use(get_shopcart_info)
 router.use(get_order_info)
+
+router.use(form)
 
 module.exports = router

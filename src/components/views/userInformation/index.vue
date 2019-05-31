@@ -145,7 +145,8 @@ export default {
       })
     },
     goBack () {
-      this.$router.push('/me')
+      // this.$router.push('/me')
+      this.$router.go(-1)
     },
   }
 }

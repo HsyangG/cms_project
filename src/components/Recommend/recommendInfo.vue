@@ -216,7 +216,8 @@ export default {
       }
     },
     goBack () {
-      this.$router.push('/home')
+      // this.$router.push('/home')
+      this.$router.go(-1)
     },
     showSizeList () {
       this.showSizeFlag = true
@@ -257,16 +258,17 @@ export default {
         }, 1000)
       } else {
         this.form.shop_count ++
-        this.count = this.form.shop_count
-        if (this.form.shop_count >= 5) {
+        if (this.form.shop_count <= 5) {
+          // 最大限购5台
           console.log(this.form.shop_count)
+          this.count = this.form.shop_count
+        } else {
           this.addTips = '已经达到最大数量了哦'
           this.showTips = true
           this.timer = setTimeout(() => {
             this.showTips = false
             clearInterval(this.timer)
           }, 1000)
-          this.count = this.form.shop_count
           return false
         }
       }

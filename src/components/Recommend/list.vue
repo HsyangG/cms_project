@@ -90,7 +90,8 @@ export default {
   },
   methods: {
     goBack () {
-      this.$router.push('/home')
+      // this.$router.push('/home')
+      this.$router.go(-1)
     },
     getCarouselList () {
       this.$axios.get('/api/get_carousel')

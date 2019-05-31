@@ -99,7 +99,8 @@ export default {
     //   localStorage.removeItem(username)
     // },
     goBack () {
-      this.$router.push('/me')
+      // this.$router.push('/me')
+      this.$router.go(-1)
     },
     toUserInfo () {
       this.$router.push('/me/user_information')

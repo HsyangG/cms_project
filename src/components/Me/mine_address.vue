@@ -100,7 +100,8 @@ export default {
       });
     },
     goBack () {
-      this.$router.push('/me')
+      // this.$router.push('/me')
+      this.$router.go(-1)
     },
     onEdit (row) {
       this.$router.push('/me/mine_address_add?id=' + row.id)
@@ -116,6 +117,8 @@ export default {
           clearInterval(this.timer)
         }, 1000)
         return false
+      } else {
+        this.$axios.post('/api/address/delete')
       }
     },
     handleCancel () {
@@ -126,23 +129,6 @@ export default {
       setTimeout(() => {
         this.is_disable = false
       }, 1000)
-      this.$axios.post('/api/logout', qs.stringify(this.listQuery))
-      .then((response) => {
-        if (response.data.code == 0) {
-          localStorage.phone = ''
-          localStorage.username = ''
-          localStorage.login_status = ''
-          this.showDialog = false
-          clearInterval()
-          this.timer = setInterval(() => {
-            // console.log('hello')
-            this.$router.push('/me')
-            clearInterval(this.timer)
-          }, 500)
-        }
-      }).catch((err) => {
-        console.log(err)
-      });
     },
     toAddAddress () {
       this.$router.push('/me/mine_address_add')

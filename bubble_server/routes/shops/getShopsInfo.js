@@ -54,7 +54,7 @@ shops.get('/api/get_shops_info', async (req, res) => {
   }
 })
 shops.get('/api/get_hot_shops', async (req, res) => {
-  // res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Origin', '*')
   let body = req.query
   const hot_shop = await query(sql.queryAllAdvertisement)
   if (hot_shop.length != 0) {

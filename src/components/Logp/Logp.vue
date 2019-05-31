@@ -11,7 +11,8 @@
       </div>
       <div class="sub">
         <button type="submit" class="submitBtn" @click.prevent="submit" :disabled="is_disable">登录</button>
-        <div class="usingP" @click.prevent="toLogin">短信登录</div>
+        <!-- <div class="usingP" @click.prevent="toLogin">短信登录</div> -->
+        <div class="useingP"></div>
         <hr>
         <p>没有账号，马上去 <span class="to" @click.prevent="toReg">注册</span></p>
       </div>

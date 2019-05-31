@@ -73,7 +73,8 @@ export default {
   },
   methods: {
     goBack () {
-      this.$router.push('/me/setting')
+      // this.$router.push('/me/setting')
+      this.$router.go(-1)
     },
   }
 }

@@ -157,7 +157,8 @@ export default {
       });
     },
     goBack () {
-      this.$router.push('/me/mine_address')
+      // this.$router.push('/me/mine_address')
+      this.$router.go(-1)
     },
     toUserInfo () {
       this.$router.push('/me/user_information')
@@ -167,20 +168,43 @@ export default {
     },
     handleSubmit () {
       // console.log(this.form)
+      if (!this.form.type) {
+        this.message('地址类型不能为空')
+        return false
+      }
+      if (!this.form.name) {
+        this.message('名字不能为空')
+        return false
+      }
+      if (!this.form.phone) {
+        this.message('手机号码不能为空')
+        return false
+      }
+      if (!this.form.province) {
+        this.message('省份不能为空')
+        return false
+      }
+      if (!this.form.city) {
+        this.message('城市不能为空')
+        return false
+      }
+      if (!this.form.district) {
+        this.message('县区不能为空')
+        return false
+      }
+      if (!this.form.site) {
+        this.message('详细地址不能为空')
+        return false
+      }
       this.form.account = localStorage.phone
       this.$axios.post('/api/update_address', qs.stringify(this.form))
       .then((response) => {
         if (response.data.code == 0) {
           this.getAddress()
-            this.showDialog = false
-            this.addTips = '操作成功'
-            this.showTips = true
-            this.timer = setTimeout(() => {
-              this.showTips = false
-              clearInterval(this.timer)
-            }, 1000)
-            this.$router.push('/me/mine_address')
-            return false
+          this.showDialog = false
+          this.message('操作成功')
+          this.$router.push('/me/mine_address')
+          return false
         } else {
           console.log(response.data.msg)
         }
@@ -231,6 +255,14 @@ export default {
       }).catch((err) => {
         console.log(err)
       });
+    },
+    message (msg) {
+      this.addTips = msg
+      this.showTips = true
+      this.timer = setTimeout(() => {
+        this.showTips = false
+        clearInterval(this.timer)
+      }, 1000)
     }
   }
 }

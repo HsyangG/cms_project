@@ -163,7 +163,8 @@ export default {
     },
     tologin () {
       // 已有账号，跳转去登录
-      this.$router.push('/callme/login')
+      // this.$router.push('/callme/login')
+      this.$router.push('/callme/logp')
     },
     toMe () {
       this.$router.push('/me')

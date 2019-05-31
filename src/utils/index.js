@@ -26,5 +26,5 @@ export function toStopPrevent (dom) {
 }
 
 export function offEventHubListener (_this, _event) {
-  this.$root.eventHub.$off(_event)
+  _this.$root.eventHub.$off(_event)
 }

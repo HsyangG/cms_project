@@ -81,4 +81,9 @@ address.post('/api/update_address', async (req, res) => {
   }
 })
 
+address.post('/api/address/delete', async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  let body = req.body
+})
+
 module.exports = address

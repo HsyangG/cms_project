@@ -185,7 +185,8 @@ export default {
   },
   methods: {
     goBack () {
-      this.$router.push('/shopcart')
+      // this.$router.push('/shopcart')
+      this.$router.go(-1)
     },
     getAddress () {
       this.$axios.get('/api/get_address', {

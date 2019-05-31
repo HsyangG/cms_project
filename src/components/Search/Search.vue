@@ -20,7 +20,7 @@
         <div class="recommendationSearch">
           <p>搜索结果</p>
           <!-- <img src="./../../assets/img/tuijiansousuo.jpg" alt="..."> -->
-          <div class="rcdContent" ref="redContent" v-if="searchResult" v-for="item in searchResult" :key="item.id">
+          <div class="rcdContent" ref="redContent" v-if="searchResult" v-for="item in searchResult" :key="item.id" @click="toRecommendInfo(item.id)">
             <div>{{item.name}}</div>
           </div>
           <div v-if="!searchResult" style="padding-bottom: 15px;color: #ccc;background: #fff;">{{err_message}}</div>
@@ -142,6 +142,9 @@ export default {
     //   }
     //   return history
     // },
+    toRecommendInfo (val) {
+      this.$router.push('/recommend/recommend_info?id=' + val)
+    }
   }
 }
 </script>

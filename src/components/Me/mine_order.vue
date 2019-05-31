@@ -69,7 +69,8 @@ export default {
   },
   methods: {
     goBack () {
-      this.$router.push('/me')
+      // this.$router.push('/me')
+      this.$router.go(-1)
     },
     tabClick (index) {
       this.currentIndex = index
