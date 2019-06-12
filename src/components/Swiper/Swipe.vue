@@ -70,6 +70,7 @@ export default {
     },
     reInitPages () {
       let children = this.$children
+      console.log(children)
       // 设置拖动状态
       this.noDrag = children.length === 1 && this.noDragWhenSingle // 当前只有一个 item，并且设置了只有一个不支持拖动
       let pages = []

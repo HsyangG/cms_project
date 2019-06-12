@@ -19,18 +19,18 @@
     "blueimp-md5": "^2.10.0",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
-    "express-art-template": "^1.0.1",
     "express-session": "^1.16.1",
+    "happypack": "^5.0.1",
     "js-cookie": "^2.2.0",
     "mint-ui": "^2.2.13",
-    "mongoose": "^5.4.5",
     "mysql": "^2.17.1",
     "qs": "^6.6.0",
     "silly-datetime": "^0.1.2",
     "swiper": "^4.4.6",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
-    "vuex": "^3.1.0"
+    "vuex": "^3.1.0",
+    "webpack-parallel-uglify-plugin": "^1.1.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

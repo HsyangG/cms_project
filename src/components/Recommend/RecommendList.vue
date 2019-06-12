@@ -146,11 +146,11 @@ export default {
         this.newsList = res.data.message
       })
       .catch(err => console.log('新闻列表异常', err)) */
-      this.getCarousel()
       this.getHotShops()
       this.getShopList()
   },
   mounted () {
+    this.getCarousel()
     this.$nextTick(() => {
       initScroll(this.scroll, this.$refs.recommendListWrapper)
     })
